@@ -1,0 +1,15 @@
+# 1x3 sliding tile puzzle, standard representation
+
+DOMAIN tile 3   # define a domain called "tile" consisting of 3 constants
+       b 1 2    # these are the constants (b is for the blank)
+
+3		# a state is a vector of length 3
+
+tile tile tile 
+
+b X - => X b - LABEL LEFT   COST 2
+X b - => b X - LABEL RIGHT  COST 3
+- b X => - X b LABEL LEFT   COST 4
+- X b => - b X LABEL RIGHT  COST 5
+
+GOAL b 1 2

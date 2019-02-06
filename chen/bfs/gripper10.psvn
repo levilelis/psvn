@@ -1,0 +1,51 @@
+13
+
+3 11 11 3 3 3 3 3 3 3 3 3 3 
+
+# rules for pickup
+A 10 - A - - - - - - - - - => A 0 - 2 - - - - - - - - - LABEL PICKUP_LEFT_1
+A - 10 A - - - - - - - - - => A - 0 2 - - - - - - - - - LABEL PICKUP_RIGHT_1
+A 10 - - A - - - - - - - - => A 1 - - 2 - - - - - - - - LABEL PICKUP_LEFT_2
+A - 10 - A - - - - - - - - => A - 1 - 2 - - - - - - - - LABEL PICKUP_RIGHT_2
+A 10 - - - A - - - - - - - => A 2 - - - 2 - - - - - - - LABEL PICKUP_LEFT_3
+A - 10 - - A - - - - - - - => A - 2 - - 2 - - - - - - - LABEL PICKUP_RIGHT_3
+A 10 - - - - A - - - - - - => A 3 - - - - 2 - - - - - - LABEL PICKUP_LEFT_4
+A - 10 - - - A - - - - - - => A - 3 - - - 2 - - - - - - LABEL PICKUP_RIGHT_4
+A 10 - - - - - A - - - - - => A 4 - - - - - 2 - - - - - LABEL PICKUP_LEFT_5
+A - 10 - - - - A - - - - - => A - 4 - - - - 2 - - - - - LABEL PICKUP_RIGHT_5
+A 10 - - - - - - A - - - - => A 5 - - - - - - 2 - - - - LABEL PICKUP_LEFT_6
+A - 10 - - - - - A - - - - => A - 5 - - - - - 2 - - - - LABEL PICKUP_RIGHT_6
+A 10 - - - - - - - A - - - => A 6 - - - - - - - 2 - - - LABEL PICKUP_LEFT_7
+A - 10 - - - - - - A - - - => A - 6 - - - - - - 2 - - - LABEL PICKUP_RIGHT_7
+A 10 - - - - - - - - A - - => A 7 - - - - - - - - 2 - - LABEL PICKUP_LEFT_8
+A - 10 - - - - - - - A - - => A - 7 - - - - - - - 2 - - LABEL PICKUP_RIGHT_8
+A 10 - - - - - - - - - A - => A 8 - - - - - - - - - 2 - LABEL PICKUP_LEFT_9
+A - 10 - - - - - - - - A - => A - 8 - - - - - - - - 2 - LABEL PICKUP_RIGHT_9
+A 10 - - - - - - - - - - A => A 9 - - - - - - - - - - 2 LABEL PICKUP_LEFT_10
+A - 10 - - - - - - - - - A => A - 9 - - - - - - - - - 2 LABEL PICKUP_RIGHT_10
+# rules for putting down
+A 0 - 2 - - - - - - - - - => A 10 - A - - - - - - - - - LABEL PUT_DOWN_LEFT_1
+A - 0 2 - - - - - - - - - => A - 10 A - - - - - - - - - LABEL PUT_DOWN_RIGHT_1
+A 1 - - 2 - - - - - - - - => A 10 - - A - - - - - - - - LABEL PUT_DOWN_LEFT_2
+A - 1 - 2 - - - - - - - - => A - 10 - A - - - - - - - - LABEL PUT_DOWN_RIGHT_2
+A 2 - - - 2 - - - - - - - => A 10 - - - A - - - - - - - LABEL PUT_DOWN_LEFT_3
+A - 2 - - 2 - - - - - - - => A - 10 - - A - - - - - - - LABEL PUT_DOWN_RIGHT_3
+A 3 - - - - 2 - - - - - - => A 10 - - - - A - - - - - - LABEL PUT_DOWN_LEFT_4
+A - 3 - - - 2 - - - - - - => A - 10 - - - A - - - - - - LABEL PUT_DOWN_RIGHT_4
+A 4 - - - - - 2 - - - - - => A 10 - - - - - A - - - - - LABEL PUT_DOWN_LEFT_5
+A - 4 - - - - 2 - - - - - => A - 10 - - - - A - - - - - LABEL PUT_DOWN_RIGHT_5
+A 5 - - - - - - 2 - - - - => A 10 - - - - - - A - - - - LABEL PUT_DOWN_LEFT_6
+A - 5 - - - - - 2 - - - - => A - 10 - - - - - A - - - - LABEL PUT_DOWN_RIGHT_6
+A 6 - - - - - - - 2 - - - => A 10 - - - - - - - A - - - LABEL PUT_DOWN_LEFT_7
+A - 6 - - - - - - 2 - - - => A - 10 - - - - - - A - - - LABEL PUT_DOWN_RIGHT_7
+A 7 - - - - - - - - 2 - - => A 10 - - - - - - - - A - - LABEL PUT_DOWN_LEFT_8
+A - 7 - - - - - - - 2 - - => A - 10 - - - - - - - A - - LABEL PUT_DOWN_RIGHT_8
+A 8 - - - - - - - - - 2 - => A 10 - - - - - - - - - A - LABEL PUT_DOWN_LEFT_9
+A - 8 - - - - - - - - 2 - => A - 10 - - - - - - - - A - LABEL PUT_DOWN_RIGHT_9
+A 9 - - - - - - - - - - 2 => A 10 - - - - - - - - - - A LABEL PUT_DOWN_LEFT_10
+A - 9 - - - - - - - - - 2 => A - 10 - - - - - - - - - A LABEL PUT_DOWN_RIGHT_10
+# rules for moving the robot
+0 - - - - - - - - - - - -  => 1 - - - - - - - - - - - - LABEL ROBOT_MOVE01
+1 - - - - - - - - - - - -  => 0 - - - - - - - - - - - - LABEL ROBOT_MOVE10
+
+GOAL 1 10 10 1 1 1 1 1 1 1 1 1 1 

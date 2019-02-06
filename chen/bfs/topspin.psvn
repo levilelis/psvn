@@ -1,0 +1,24 @@
+# 14 rotate 3
+# tile N is not explicitly given - it always rests at the end of the state
+
+13
+
+13 13 13 13 13 13 13 13 13 13 13 13 13
+
+X Y Z - - - - - - - - - - => Z Y X - - - - - - - - - -
+- X Y Z - - - - - - - - - => - Z Y X - - - - - - - - -
+- - X Y Z - - - - - - - - => - - Z Y X - - - - - - - -
+- - - X Y Z - - - - - - - => - - - Z Y X - - - - - - -
+- - - - X Y Z - - - - - - => - - - - Z Y X - - - - - -
+- - - - - X Y Z - - - - - => - - - - - Z Y X - - - - -
+- - - - - - X Y Z - - - - => - - - - - - Z Y X - - - -
+- - - - - - - X Y Z - - - => - - - - - - - Z Y X - - -
+- - - - - - - - X Y Z - - => - - - - - - - - Z Y X - -
+- - - - - - - - - X Y Z - => - - - - - - - - - Z Y X -
+- - - - - - - - - - X Y Z => - - - - - - - - - - Z Y X
+A B C D E F G H I J K X Y => Y X A B C D E F G H I J K
+Z - - - - - - - - - - - X => X - - - - - - - - - - - Z
+Y Z C D E F G H I J K L M => C D E F G H I J K L M Z Y
+
+GOAL
+0 1 2 3 4 5 6 7 8 9 10 11 12

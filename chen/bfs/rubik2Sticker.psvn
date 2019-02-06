@@ -1,0 +1,63 @@
+DOMAIN colour 6
+       RED GREEN BLUE YELLOW ORANGE WHITE
+
+# there is one state variable for each sticker (visible face of a cubie)
+24
+
+colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour colour
+
+A B C D E - G - - - - - - N - P - - S T U V - - =>
+C A D B S - T - - - - - - U - V - - P N G E - -
+
+A B C D E - G - - - - - - N - P - - S T U V - - =>
+D C B A P - N - - - - - - G - E - - V U T S - -
+
+C A D B S - T - - - - - - U - V - - P N G E - - =>
+A B C D E - G - - - - - - N - P - - S T U V - -
+
+- B - D E F G H I - K - - - - - - R - T - V - X =>
+- V - X G E H F T - R - - - - - - B - D - K - I
+
+- B - D E F G H I - K - - - - - - R - T - V - X =>
+- K - I H G F E D - B - - - - - - V - X - R - T
+
+- V - X G E H F T - R - - - - - - B - D - K - I =>
+- B - D E F G H I - K - - - - - - R - T - V - X
+
+- - - - - F - H I J K L M - O - Q R - - - - W X =>
+- - - - - X - W K I L J R - Q - F H - - - - M O
+
+- - - - - F - H I J K L M - O - Q R - - - - W X =>
+- - - - - O - M L K J I H - F - X W - - - - R Q
+
+- - - - - X - W K I L J R - Q - F H - - - - M O =>
+- - - - - F - H I J K L M - O - Q R - - - - W X
+
+A - C - - - - - - J - L M N O P Q - S - U - W - =>
+Q - S - - - - - - W - U O M P N L - J - A - C -
+
+A - C - - - - - - J - L M N O P Q - S - U - W - =>
+L - J - - - - - - C - A P O N M U - W - Q - S -
+
+Q - S - - - - - - W - U O M P N L - J - A - C - =>
+A - C - - - - - - J - L M N O P Q - S - U - W -
+
+A B - - E F - - I J - - M N - - Q R S T - - - - =>
+E F - - I J - - M N - - A B - - S Q T R - - - -
+
+A B - - E F - - I J - - M N - - Q R S T - - - - =>
+I J - - M N - - A B - - E F - - T S R Q - - - -
+
+E F - - I J - - M N - - A B - - S Q T R - - - - =>
+A B - - E F - - I J - - M N - - Q R S T - - - -
+
+- - C D - - G H - - K L - - O P - - - - U V W X =>
+- - O P - - C D - - G H - - K L - - - - W U X V
+
+- - C D - - G H - - K L - - O P - - - - U V W X =>
+- - K L - - O P - - C D - - G H - - - - X W V U
+
+- - O P - - C D - - G H - - K L - - - - W U X V =>
+- - C D - - G H - - K L - - O P - - - - U V W X
+
+GOAL RED RED RED RED GREEN GREEN GREEN GREEN BLUE BLUE BLUE BLUE YELLOW YELLOW YELLOW YELLOW ORANGE ORANGE ORANGE ORANGE WHITE WHITE WHITE WHITE

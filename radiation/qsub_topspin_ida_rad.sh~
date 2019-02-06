@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#directory in which the problem instances are
+dir=$1
+
+for P in 0.001; do
+	for F in 100000; do
+		for FILE in `dir -d $dir*.pro` ; do
+			(qsub -l select=1:ncpus=1:mem=1GB -v P=$P,F=$F single_topspin_ida_rad.sh) &
+		done
+	done
+done
+	        
+echo
+

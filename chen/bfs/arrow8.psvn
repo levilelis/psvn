@@ -1,0 +1,39 @@
+# This file was created by genArrowStd.cpp with the following command line parameters:
+#  8
+
+# number of state variables
+8
+
+# All state variables are binary.
+2 2 2 2 2 2 2 2 
+
+0 0 - - - - - - => 1 1 - - - - - -   LABEL Flip_1_2
+0 1 - - - - - - => 1 0 - - - - - -   LABEL Flip_1_2
+1 0 - - - - - - => 0 1 - - - - - -   LABEL Flip_1_2
+1 1 - - - - - - => 0 0 - - - - - -   LABEL Flip_1_2
+- 0 0 - - - - - => - 1 1 - - - - -   LABEL Flip_2_3
+- 0 1 - - - - - => - 1 0 - - - - -   LABEL Flip_2_3
+- 1 0 - - - - - => - 0 1 - - - - -   LABEL Flip_2_3
+- 1 1 - - - - - => - 0 0 - - - - -   LABEL Flip_2_3
+- - 0 0 - - - - => - - 1 1 - - - -   LABEL Flip_3_4
+- - 0 1 - - - - => - - 1 0 - - - -   LABEL Flip_3_4
+- - 1 0 - - - - => - - 0 1 - - - -   LABEL Flip_3_4
+- - 1 1 - - - - => - - 0 0 - - - -   LABEL Flip_3_4
+- - - 0 0 - - - => - - - 1 1 - - -   LABEL Flip_4_5
+- - - 0 1 - - - => - - - 1 0 - - -   LABEL Flip_4_5
+- - - 1 0 - - - => - - - 0 1 - - -   LABEL Flip_4_5
+- - - 1 1 - - - => - - - 0 0 - - -   LABEL Flip_4_5
+- - - - 0 0 - - => - - - - 1 1 - -   LABEL Flip_5_6
+- - - - 0 1 - - => - - - - 1 0 - -   LABEL Flip_5_6
+- - - - 1 0 - - => - - - - 0 1 - -   LABEL Flip_5_6
+- - - - 1 1 - - => - - - - 0 0 - -   LABEL Flip_5_6
+- - - - - 0 0 - => - - - - - 1 1 -   LABEL Flip_6_7
+- - - - - 0 1 - => - - - - - 1 0 -   LABEL Flip_6_7
+- - - - - 1 0 - => - - - - - 0 1 -   LABEL Flip_6_7
+- - - - - 1 1 - => - - - - - 0 0 -   LABEL Flip_6_7
+- - - - - - 0 0 => - - - - - - 1 1   LABEL Flip_7_8
+- - - - - - 0 1 => - - - - - - 1 0   LABEL Flip_7_8
+- - - - - - 1 0 => - - - - - - 0 1   LABEL Flip_7_8
+- - - - - - 1 1 => - - - - - - 0 0   LABEL Flip_7_8
+
+GOAL 0 0 0 0 0 0 0 0 

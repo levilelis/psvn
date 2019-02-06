@@ -1,0 +1,41 @@
+# This file was created by genHanoi3.cpp with the following command line parameters:
+#  5
+
+# number of state variables
+ 5
+
+# All state variables are 3-valued (1...3).
+3N 3N 3N 3N 3N 
+
+ 1 - - - - => 2 - - - -  LABEL Disk1_From1_To2
+ 1 - - - - => 3 - - - -  LABEL Disk1_From1_To3
+ 2 - - - - => 1 - - - -  LABEL Disk1_From2_To1
+ 2 - - - - => 3 - - - -  LABEL Disk1_From2_To3
+ 3 - - - - => 1 - - - -  LABEL Disk1_From3_To1
+ 3 - - - - => 2 - - - -  LABEL Disk1_From3_To2
+ 3 1 - - - => 3 2 - - -  LABEL Disk2_From1_To2
+ 2 1 - - - => 2 3 - - -  LABEL Disk2_From1_To3
+ 3 2 - - - => 3 1 - - -  LABEL Disk2_From2_To1
+ 1 2 - - - => 1 3 - - -  LABEL Disk2_From2_To3
+ 2 3 - - - => 2 1 - - -  LABEL Disk2_From3_To1
+ 1 3 - - - => 1 2 - - -  LABEL Disk2_From3_To2
+ 3 3 1 - - => 3 3 2 - -  LABEL Disk3_From1_To2
+ 2 2 1 - - => 2 2 3 - -  LABEL Disk3_From1_To3
+ 3 3 2 - - => 3 3 1 - -  LABEL Disk3_From2_To1
+ 1 1 2 - - => 1 1 3 - -  LABEL Disk3_From2_To3
+ 2 2 3 - - => 2 2 1 - -  LABEL Disk3_From3_To1
+ 1 1 3 - - => 1 1 2 - -  LABEL Disk3_From3_To2
+ 3 3 3 1 - => 3 3 3 2 -  LABEL Disk4_From1_To2
+ 2 2 2 1 - => 2 2 2 3 -  LABEL Disk4_From1_To3
+ 3 3 3 2 - => 3 3 3 1 -  LABEL Disk4_From2_To1
+ 1 1 1 2 - => 1 1 1 3 -  LABEL Disk4_From2_To3
+ 2 2 2 3 - => 2 2 2 1 -  LABEL Disk4_From3_To1
+ 1 1 1 3 - => 1 1 1 2 -  LABEL Disk4_From3_To2
+ 3 3 3 3 1 => 3 3 3 3 2  LABEL Disk5_From1_To2
+ 2 2 2 2 1 => 2 2 2 2 3  LABEL Disk5_From1_To3
+ 3 3 3 3 2 => 3 3 3 3 1  LABEL Disk5_From2_To1
+ 1 1 1 1 2 => 1 1 1 1 3  LABEL Disk5_From2_To3
+ 2 2 2 2 3 => 2 2 2 2 1  LABEL Disk5_From3_To1
+ 1 1 1 1 3 => 1 1 1 1 2  LABEL Disk5_From3_To2
+
+GOAL 1 1 1 1 1

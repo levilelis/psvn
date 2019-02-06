@@ -1,0 +1,30 @@
+# number of state variables (positions in the state vector)
+9
+# domain for each variable
+# an integer I is the numbers 0 to I-1
+# an integer I followed by N is the numbers 1 to I
+2 2 2 2 2 2 2 2 2 
+# rules <condition> => <action>
+# where both <condition> and <action> are NUMBER_VARIABLES entries wide
+1 - - 0 - - - - - => 0 - - 1 - - - - - 
+1 - - - - - 0 - - => 0 - - - - - 1 - - 
+0 - - 1 - - - - - => 1 - - 0 - - - - - 
+- - - 1 - - 0 - - => - - - 0 - - 1 - - 
+0 - - - - - 1 - - => 1 - - - - - 0 - - 
+- - - 0 - - 1 - - => - - - 1 - - 0 - - 
+0 1 - 0 0 - - - - => 0 0 - 0 1 - - - - 
+0 1 - - - - 0 0 - => 0 0 - - - - 0 1 - 
+0 0 - 0 1 - - - - => 0 1 - 0 0 - - - - 
+- - - 0 1 - 0 0 - => - - - 0 0 - 0 1 - 
+0 0 - - - - 0 1 - => 0 1 - - - - 0 0 - 
+- - - 0 0 - 0 1 - => - - - 0 1 - 0 0 - 
+0 0 1 0 0 0 - - - => 0 0 0 0 0 1 - - - 
+0 0 1 - - - 0 0 0 => 0 0 0 - - - 0 0 1 
+0 0 0 0 0 1 - - - => 0 0 1 0 0 0 - - - 
+- - - 0 0 1 0 0 0 => - - - 0 0 0 0 0 1 
+0 0 0 - - - 0 0 1 => 0 0 1 - - - 0 0 0 
+- - - 0 0 0 0 0 1 => - - - 0 0 1 0 0 0 
+# goal rule <condition>
+# where condition is like a normal rule condition
+# multiple goal conditions are logically disjunctive
+GOAL 0 0 0 0 0 0 1 1 1 

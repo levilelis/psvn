@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Set the limit to ~2 GB
+ulimit -v 1000000
+
+#set the time limit to one hour
+ulimit -t 600
+
+cd /home/levi/psvn-work/radiation
+
+# Path to which the results will be added
+RESULTS=results/topspin
+
+./topspin_17_4.ida ../pdb/topspin/topspen_17_4_pdb ${PROBLEM} ../solutions/topspin/topspin_17_4_pdb >> ${RESULTS}/${PROBLEM}_${P}_${F}
+	        
+echo
+

@@ -1,0 +1,25 @@
+# This file was created by genPancake.cpp with the following command line parameters:
+#  15
+
+# number of state variables = the number of pancakes
+15
+
+# All state variables have 15 possible values.
+ 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+
+X0 X1 -  -  -  -  -  -  -  -  -  -  -  -  -  => X1 X0 -  -  -  -  -  -  -  -  -  -  -  -  -  LABEL Rev2
+X0 X1 X2 -  -  -  -  -  -  -  -  -  -  -  -  => X2 X1 X0 -  -  -  -  -  -  -  -  -  -  -  -  LABEL Rev3
+X0 X1 X2 X3 -  -  -  -  -  -  -  -  -  -  -  => X3 X2 X1 X0 -  -  -  -  -  -  -  -  -  -  -  LABEL Rev4
+X0 X1 X2 X3 X4 -  -  -  -  -  -  -  -  -  -  => X4 X3 X2 X1 X0 -  -  -  -  -  -  -  -  -  -  LABEL Rev5
+X0 X1 X2 X3 X4 X5 -  -  -  -  -  -  -  -  -  => X5 X4 X3 X2 X1 X0 -  -  -  -  -  -  -  -  -  LABEL Rev6
+X0 X1 X2 X3 X4 X5 X6 -  -  -  -  -  -  -  -  => X6 X5 X4 X3 X2 X1 X0 -  -  -  -  -  -  -  -  LABEL Rev7
+X0 X1 X2 X3 X4 X5 X6 X7 -  -  -  -  -  -  -  => X7 X6 X5 X4 X3 X2 X1 X0 -  -  -  -  -  -  -  LABEL Rev8
+X0 X1 X2 X3 X4 X5 X6 X7 X8 -  -  -  -  -  -  => X8 X7 X6 X5 X4 X3 X2 X1 X0 -  -  -  -  -  -  LABEL Rev9
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 -  -  -  -  -  => X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 -  -  -  -  -  LABEL Rev10
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 -  -  -  -  => X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 -  -  -  -  LABEL Rev11
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 -  -  -  => X11 X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 -  -  -  LABEL Rev12
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 -  -  => X12 X11 X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 -  -  LABEL Rev13
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 -  => X13 X12 X11 X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 -  LABEL Rev14
+X0 X1 X2 X3 X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 => X14 X13 X12 X11 X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X0 LABEL Rev15
+
+GOAL 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
