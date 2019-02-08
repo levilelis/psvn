@@ -1,139 +1,163 @@
-/*
-Copyright (C) 2013 by the PSVN Research Group, University of Alberta
-*/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
 #include <sys/time.h>
+#include <vector>
+#include <math.h>
+#include <iostream>
 #include "../AbstractionHeuristic.h"
 
-
-/* if MOVE_PRUNING is undefined, parent pruning is done.
-   if MOVE_PRUNING is defined, parent pruning is not done.*/
-//#define MOVE_PRUNING
+using namespace std;
 
 #define myMAX(x,y) (((x)>(y))?(x):(y))
 #define myMIN(x,y) (((x)<(y))?(x):(y))
-
 
 /* GLOBAL VARIABLES */
 int64_t nodes_expanded_for_bound ;    // number of nodes expanded for a given cost bound
 int64_t nodes_generated_for_bound ;   // number of nodes generated for a given cost bound
 int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solution found for a given start state
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
-int best_soln_sofar = INT_MAX;
+int solution_cost = INT_MAX;
+float temperature;
 
+void set_temperature_to_max_operator_cost()
+{
+	int max = 0;
+	for (int i = 0; i < NUM_FWD_RULES; i++)
+	{
+		if(fwd_rule_costs[i] > max)
+			max = fwd_rule_costs[i];
+	}
+
+	temperature = max;
+	//cout << "Setting temperature to: " << temperature << endl;
+}
+
+void compute_f_values(const AbstractionHeuristic * heuristic, const state_t* parent, const state_t *state, vector<int>& f_values, const int current_g)
+{
+    int rule_used;
+    func_ptr iter;
+    state_t child;
+
+    init_fwd_iter( iter );
+    while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
+        apply_fwd_rule( rule_used, state, &child );
+
+        if( compare_states( &child, parent ) == 0 )   // parent pruning
+            continue;
+
+        const int move_cost = fwd_rule_costs[ rule_used ];
+        int child_f = heuristic->abstraction_data_lookup( &child ) + current_g + move_cost;
+        f_values.push_back(child_f);
+    }
+}
+
+void compute_probability_distribution_from_values(vector<int>& f_values, vector<float>& probs, const int f_value_parent)
+{
+	float den = 0.0;
+	for(vector<int>::iterator it = f_values.begin(); it != f_values.end(); ++it)
+	{
+		den += exp((f_value_parent - *it)/temperature);
+	}
+
+	for(vector<int>::iterator it = f_values.begin(); it != f_values.end(); ++it)
+	{
+		probs.push_back(exp((f_value_parent - *it)/temperature)/den);
+	}
+}
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
-#ifdef MOVE_PRUNING
-              const int history,           // for move pruning
-#else
+			  const int f_state, // for computing policy
               const state_t *parent_state, // for parent pruning
-#endif
-              const int bound, int *next_bound, int current_g )
+              const int bound, int current_g,
+			  int depth, float p)
 {
     int rule_used;
-#ifdef MOVE_PRUNING
-    int c_history;
-#endif
     func_ptr iter;
     state_t child;
 
     nodes_expanded_for_bound++;
 
+    //Computing the number of children and their f_values
+    vector<int> f_values_children;
+    vector<float> probability_distribution;
+    compute_f_values(heuristic, parent_state, state, f_values_children, current_g);
+    compute_probability_distribution_from_values(f_values_children, probability_distribution, f_state);
+
     init_fwd_iter( iter );
+    vector<float>::iterator iterator_probs = probability_distribution.begin();
     while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
-
-#ifdef MOVE_PRUNING
-        if( !fwd_rule_valid_for_history( history, rule_used ) )
-            continue;
-        c_history = next_fwd_history( history, rule_used );
-#endif
-
         apply_fwd_rule( rule_used, state, &child );
         nodes_generated_for_bound++;
 
-#ifndef MOVE_PRUNING
         if( compare_states( &child, parent_state ) == 0 )   // parent pruning
             continue;
-#endif
 
         const int move_cost = fwd_rule_costs[ rule_used ];
 
         if (is_goal(&child)) {
-            best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
-            if (best_soln_sofar <= bound) {
-               return 1;
-            } else {
-               continue;
-            }
+        	solution_cost = current_g + move_cost;
+        	return 1;
         } else {
-            int child_h = 2 * heuristic->abstraction_data_lookup( &child );
+            int child_h = heuristic->abstraction_data_lookup( &child );
 
-            if (current_g + move_cost + child_h > bound) {
-               *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
-            } else {
+            float v = log2(depth) - p;
+            if(v <= bound)
+            {
                if( dfs_heur( heuristic, &child,
-        #ifdef MOVE_PRUNING
-                             c_history,  // move pruning
-        #else
+            		         current_g + move_cost + child_h, // f_value of the child, used for computing the policy
                              state,      // parent pruning
-        #endif
-                             bound, next_bound, current_g + move_cost ) )
+                             bound, current_g + move_cost,
+							 depth + 1, p + log2(*iterator_probs)) )
                {
                    return 1;
-                }
+               }
             }
         }
+
+        iterator_probs++;
     }
-    assert( *next_bound > bound );
+
     return 0;
 }
 
-
-
 int idastar( const AbstractionHeuristic * heuristic, const state_t *state )
 {
-    int next_bound, bound, done;
+    int bound, done;
 
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
 
+    set_temperature_to_max_operator_cost();
+
     if (is_goal(state)) { return 0; }
 
-    best_soln_sofar = INT_MAX;
-    bound = 2* heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
+    solution_cost = INT_MAX;
+    int h_value_start_state = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
+    bound = 1;
     while (1) {
-        next_bound = INT_MAX;
         nodes_expanded_for_bound  = 0;
         nodes_generated_for_bound = 0;
+
         done = dfs_heur( heuristic, state,
-#ifdef MOVE_PRUNING
-                             init_history,  // move pruning
-#else
+        					 h_value_start_state, // f_value of the start state
                              state,         // parent pruning
-#endif
-                             bound, &next_bound, 0 );
+                             bound, 0,
+							 1, 0);
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
         if( done ) {
             break;
         }
-        assert( next_bound > bound );
-        bound = next_bound;
-        if ( best_soln_sofar <= bound ) { // will always be true if bound == INT_MAX
-            break;
-        }
+
+        bound += 1;
     }
 
-    return best_soln_sofar;
+    return solution_cost;
 }
-
-
 
 int main( int argc, char **argv )
 {

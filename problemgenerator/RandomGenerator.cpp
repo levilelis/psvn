@@ -74,34 +74,58 @@ int random_state( state_t *state, CRandomMersenne * RandGen )
 
 int main(int argc, char **argv)
 {
-	if(argc != 3)
+	if(argc != 4)
 	{
-		cout << "Invalid arguments" << endl;
+		cout << "Invalid arguments: <number of samples> <output file> <single file? (0 or 1)>" << endl;
 		exit(-1);
 	}
 
 	int numberSamples = atoi( argv[1] );
 	string outputFile( argv[2] );
+	int singleFile = atoi( argv[1] );
 
 	CRandomMersenne * RanGen = new CRandomMersenne( ( unsigned )time( NULL ) );
 
 	state_t state;
 
-	for( int i = 0; i < numberSamples; i++ )
+	if(singleFile == 1)
+	{
+		for( int i = 0; i < numberSamples; i++ )
+		{
+			FILE * file;
+
+			ostringstream ss;
+			ss << i + 1;
+			ss << ".pro";
+			string output = outputFile;
+
+			output.append(ss.str());
+			file = fopen( output.c_str(), "w" );
+
+			random_state( &state, RanGen );
+			print_state( file, &state );
+			fprintf(file, "\n");
+
+			fclose( file );
+		}
+	}
+	else
 	{
 		FILE * file;
 
-	    ostringstream ss;
-	    ss << i + 1;
-	    ss << ".pro";
-	    string output = outputFile;
+		ostringstream ss;
+		ss << ".pro";
+		string output = outputFile;
 
-	    output.append(ss.str());
+		output.append(ss.str());
 		file = fopen( output.c_str(), "w" );
 
-		random_state( &state, RanGen );
-		print_state( file, &state );
-		fprintf(file, "\n");
+		for( int i = 0; i < numberSamples; i++ )
+		{
+			random_state( &state, RanGen );
+			print_state( file, &state );
+			fprintf(file, "\n");
+		}
 
 		fclose( file );
 	}

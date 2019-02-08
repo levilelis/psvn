@@ -1,0 +1,35 @@
+# 3x3 sliding tile puzzle
+
+DOMAIN tile 9
+       B 1 2 3 4 5 6 7 8
+
+9
+
+tile tile tile tile tile tile tile tile tile
+
+B X - - - - - - - => X B - - - - - - - LABEL LEFT COST 1
+B - - X - - - - - => X - - B - - - - - LABEL UP COST 1
+X B - - - - - - - => B X - - - - - - - LABEL RIGHT COST 2
+- B - - X - - - - => - X - - B - - - - LABEL UP COST 3
+- B X - - - - - - => - X B - - - - - - LABEL LEFT COST 1
+- X B - - - - - - => - B X - - - - - - LABEL RIGHT COST 2
+- - B - - X - - - => - - X - - B - - - LABEL UP COST 1
+X - - B - - - - - => B - - X - - - - - LABEL DOWN COST 2
+- - - B X - - - - => - - - X B - - - - LABEL LEFT COST 4
+- - - B - - X - - => - - - X - - B - - LABEL UP
+- - - X B - - - - => - - - B X - - - - LABEL RIGHT
+- X - - B - - - - => - B - - X - - - - LABEL DOWN
+- - - - B X - - - => - - - - X B - - - LABEL LEFT
+- - - - B - - X - => - - - - X - - B - LABEL UP
+- - - - X B - - - => - - - - B X - - - LABEL RIGHT
+- - X - - B - - - => - - B - - X - - - LABEL DOWN
+- - - - - B - - X => - - - - - X - - B LABEL UP
+- - - X - - B - - => - - - B - - X - - LABEL DOWN
+- - - - - - B X - => - - - - - - X B - LABEL LEFT
+- - - - - - X B - => - - - - - - B X - LABEL RIGHT
+- - - - X - - B - => - - - - B - - X - LABEL DOWN
+- - - - - - - B X => - - - - - - - X B LABEL LEFT
+- - - - - - - X B => - - - - - - - B X LABEL RIGHT
+- - - - - X - - B => - - - - - B - - X LABEL DOWN
+
+GOAL B 1 2 3 4 5 6 7 8

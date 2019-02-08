@@ -1,0 +1,57 @@
+DOMAIN tile 16
+	B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+
+16
+
+tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile 
+
+X - - - B - - - - - - - - - - - => B - - - X - - - - - - - - - - - LABEL UP COST 1
+- X - - - B - - - - - - - - - - => - B - - - X - - - - - - - - - - LABEL UP COST 8
+- - X - - - B - - - - - - - - - => - - B - - - X - - - - - - - - - LABEL UP COST 2
+- - - X - - - B - - - - - - - - => - - - B - - - X - - - - - - - - LABEL UP COST 10
+- - - - X - - - B - - - - - - - => - - - - B - - - X - - - - - - - LABEL UP COST 7
+- - - - - X - - - B - - - - - - => - - - - - B - - - X - - - - - - LABEL UP COST 4
+- - - - - - X - - - B - - - - - => - - - - - - B - - - X - - - - - LABEL UP COST 9
+- - - - - - - X - - - B - - - - => - - - - - - - B - - - X - - - - LABEL UP COST 5
+- - - - - - - - X - - - B - - - => - - - - - - - - B - - - X - - - LABEL UP COST 4
+- - - - - - - - - X - - - B - - => - - - - - - - - - B - - - X - - LABEL UP COST 1
+- - - - - - - - - - X - - - B - => - - - - - - - - - - B - - - X - LABEL UP COST 1
+- - - - - - - - - - - X - - - B => - - - - - - - - - - - B - - - X LABEL UP COST 5
+X B - - - - - - - - - - - - - - => B X - - - - - - - - - - - - - - LABEL LEFT COST 4
+- X B - - - - - - - - - - - - - => - B X - - - - - - - - - - - - - LABEL LEFT COST 2
+- - X B - - - - - - - - - - - - => - - B X - - - - - - - - - - - - LABEL LEFT COST 6
+- - - - X B - - - - - - - - - - => - - - - B X - - - - - - - - - - LABEL LEFT COST 6
+- - - - - X B - - - - - - - - - => - - - - - B X - - - - - - - - - LABEL LEFT COST 1
+- - - - - - X B - - - - - - - - => - - - - - - B X - - - - - - - - LABEL LEFT COST 4
+- - - - - - - - X B - - - - - - => - - - - - - - - B X - - - - - - LABEL LEFT COST 2
+- - - - - - - - - X B - - - - - => - - - - - - - - - B X - - - - - LABEL LEFT COST 10
+- - - - - - - - - - X B - - - - => - - - - - - - - - - B X - - - - LABEL LEFT COST 7
+- - - - - - - - - - - - X B - - => - - - - - - - - - - - - B X - - LABEL LEFT COST 3
+- - - - - - - - - - - - - X B - => - - - - - - - - - - - - - B X - LABEL LEFT COST 4
+- - - - - - - - - - - - - - X B => - - - - - - - - - - - - - - B X LABEL LEFT COST 8
+B X - - - - - - - - - - - - - - => X B - - - - - - - - - - - - - - LABEL RIGHT COST 9
+- B X - - - - - - - - - - - - - => - X B - - - - - - - - - - - - - LABEL RIGHT COST 8
+- - B X - - - - - - - - - - - - => - - X B - - - - - - - - - - - - LABEL RIGHT COST 8
+- - - - B X - - - - - - - - - - => - - - - X B - - - - - - - - - - LABEL RIGHT COST 2
+- - - - - B X - - - - - - - - - => - - - - - X B - - - - - - - - - LABEL RIGHT COST 7
+- - - - - - B X - - - - - - - - => - - - - - - X B - - - - - - - - LABEL RIGHT COST 6
+- - - - - - - - B X - - - - - - => - - - - - - - - X B - - - - - - LABEL RIGHT COST 4
+- - - - - - - - - B X - - - - - => - - - - - - - - - X B - - - - - LABEL RIGHT COST 5
+- - - - - - - - - - B X - - - - => - - - - - - - - - - X B - - - - LABEL RIGHT COST 5
+- - - - - - - - - - - - B X - - => - - - - - - - - - - - - X B - - LABEL RIGHT COST 8
+- - - - - - - - - - - - - B X - => - - - - - - - - - - - - - X B - LABEL RIGHT COST 7
+- - - - - - - - - - - - - - B X => - - - - - - - - - - - - - - X B LABEL RIGHT COST 6
+B - - - X - - - - - - - - - - - => X - - - B - - - - - - - - - - - LABEL DOWN COST 7
+- B - - - X - - - - - - - - - - => - X - - - B - - - - - - - - - - LABEL DOWN COST 1
+- - B - - - X - - - - - - - - - => - - X - - - B - - - - - - - - - LABEL DOWN COST 8
+- - - B - - - X - - - - - - - - => - - - X - - - B - - - - - - - - LABEL DOWN COST 9
+- - - - B - - - X - - - - - - - => - - - - X - - - B - - - - - - - LABEL DOWN COST 8
+- - - - - B - - - X - - - - - - => - - - - - X - - - B - - - - - - LABEL DOWN COST 9
+- - - - - - B - - - X - - - - - => - - - - - - X - - - B - - - - - LABEL DOWN COST 3
+- - - - - - - B - - - X - - - - => - - - - - - - X - - - B - - - - LABEL DOWN COST 5
+- - - - - - - - B - - - X - - - => - - - - - - - - X - - - B - - - LABEL DOWN COST 3
+- - - - - - - - - B - - - X - - => - - - - - - - - - X - - - B - - LABEL DOWN COST 1
+- - - - - - - - - - B - - - X - => - - - - - - - - - - X - - - B - LABEL DOWN COST 3
+- - - - - - - - - - - B - - - X => - - - - - - - - - - - X - - - B LABEL DOWN COST 3
+
+GOAL B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 

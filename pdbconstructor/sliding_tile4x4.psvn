@@ -1,0 +1,57 @@
+DOMAIN tile 16
+	B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+
+16
+
+tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile 
+
+X - - - B - - - - - - - - - - - => B - - - X - - - - - - - - - - - LABEL UP
+- X - - - B - - - - - - - - - - => - B - - - X - - - - - - - - - - LABEL UP
+- - X - - - B - - - - - - - - - => - - B - - - X - - - - - - - - - LABEL UP
+- - - X - - - B - - - - - - - - => - - - B - - - X - - - - - - - - LABEL UP
+- - - - X - - - B - - - - - - - => - - - - B - - - X - - - - - - - LABEL UP
+- - - - - X - - - B - - - - - - => - - - - - B - - - X - - - - - - LABEL UP
+- - - - - - X - - - B - - - - - => - - - - - - B - - - X - - - - - LABEL UP
+- - - - - - - X - - - B - - - - => - - - - - - - B - - - X - - - - LABEL UP
+- - - - - - - - X - - - B - - - => - - - - - - - - B - - - X - - - LABEL UP
+- - - - - - - - - X - - - B - - => - - - - - - - - - B - - - X - - LABEL UP
+- - - - - - - - - - X - - - B - => - - - - - - - - - - B - - - X - LABEL UP
+- - - - - - - - - - - X - - - B => - - - - - - - - - - - B - - - X LABEL UP
+X B - - - - - - - - - - - - - - => B X - - - - - - - - - - - - - - LABEL LEFT
+- X B - - - - - - - - - - - - - => - B X - - - - - - - - - - - - - LABEL LEFT
+- - X B - - - - - - - - - - - - => - - B X - - - - - - - - - - - - LABEL LEFT
+- - - - X B - - - - - - - - - - => - - - - B X - - - - - - - - - - LABEL LEFT
+- - - - - X B - - - - - - - - - => - - - - - B X - - - - - - - - - LABEL LEFT
+- - - - - - X B - - - - - - - - => - - - - - - B X - - - - - - - - LABEL LEFT
+- - - - - - - - X B - - - - - - => - - - - - - - - B X - - - - - - LABEL LEFT
+- - - - - - - - - X B - - - - - => - - - - - - - - - B X - - - - - LABEL LEFT
+- - - - - - - - - - X B - - - - => - - - - - - - - - - B X - - - - LABEL LEFT
+- - - - - - - - - - - - X B - - => - - - - - - - - - - - - B X - - LABEL LEFT
+- - - - - - - - - - - - - X B - => - - - - - - - - - - - - - B X - LABEL LEFT
+- - - - - - - - - - - - - - X B => - - - - - - - - - - - - - - B X LABEL LEFT
+B X - - - - - - - - - - - - - - => X B - - - - - - - - - - - - - - LABEL RIGHT
+- B X - - - - - - - - - - - - - => - X B - - - - - - - - - - - - - LABEL RIGHT
+- - B X - - - - - - - - - - - - => - - X B - - - - - - - - - - - - LABEL RIGHT
+- - - - B X - - - - - - - - - - => - - - - X B - - - - - - - - - - LABEL RIGHT
+- - - - - B X - - - - - - - - - => - - - - - X B - - - - - - - - - LABEL RIGHT
+- - - - - - B X - - - - - - - - => - - - - - - X B - - - - - - - - LABEL RIGHT
+- - - - - - - - B X - - - - - - => - - - - - - - - X B - - - - - - LABEL RIGHT
+- - - - - - - - - B X - - - - - => - - - - - - - - - X B - - - - - LABEL RIGHT
+- - - - - - - - - - B X - - - - => - - - - - - - - - - X B - - - - LABEL RIGHT
+- - - - - - - - - - - - B X - - => - - - - - - - - - - - - X B - - LABEL RIGHT
+- - - - - - - - - - - - - B X - => - - - - - - - - - - - - - X B - LABEL RIGHT
+- - - - - - - - - - - - - - B X => - - - - - - - - - - - - - - X B LABEL RIGHT
+B - - - X - - - - - - - - - - - => X - - - B - - - - - - - - - - - LABEL DOWN
+- B - - - X - - - - - - - - - - => - X - - - B - - - - - - - - - - LABEL DOWN
+- - B - - - X - - - - - - - - - => - - X - - - B - - - - - - - - - LABEL DOWN
+- - - B - - - X - - - - - - - - => - - - X - - - B - - - - - - - - LABEL DOWN
+- - - - B - - - X - - - - - - - => - - - - X - - - B - - - - - - - LABEL DOWN
+- - - - - B - - - X - - - - - - => - - - - - X - - - B - - - - - - LABEL DOWN
+- - - - - - B - - - X - - - - - => - - - - - - X - - - B - - - - - LABEL DOWN
+- - - - - - - B - - - X - - - - => - - - - - - - X - - - B - - - - LABEL DOWN
+- - - - - - - - B - - - X - - - => - - - - - - - - X - - - B - - - LABEL DOWN
+- - - - - - - - - B - - - X - - => - - - - - - - - - X - - - B - - LABEL DOWN
+- - - - - - - - - - B - - - X - => - - - - - - - - - - X - - - B - LABEL DOWN
+- - - - - - - - - - - B - - - X => - - - - - - - - - - - X - - - B LABEL DOWN
+
+GOAL B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
