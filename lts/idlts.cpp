@@ -107,6 +107,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
         	child_count++;
 
             float v = log2(depth) - p;
+
             if(v <= bound)
             {
                if( dfs_heur( heuristic, &child,
