@@ -88,6 +88,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
     init_fwd_iter( iter );
     vector<float>::iterator iterator_probs = probability_distribution.begin();
+    int child_count = 0;
     while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
         apply_fwd_rule( rule_used, state, &child );
         nodes_generated_for_bound++;
@@ -101,13 +102,16 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
         	solution_cost = current_g + move_cost;
         	return 1;
         } else {
-            int child_h = heuristic->abstraction_data_lookup( &child );
+            //int child_h = heuristic->abstraction_data_lookup( &child );
+        	int f_child = f_values_children[child_count];
+        	child_count++;
 
             float v = log2(depth) - p;
             if(v <= bound)
             {
                if( dfs_heur( heuristic, &child,
-            		         current_g + move_cost + child_h, // f_value of the child, used for computing the policy
+            		         //current_g + move_cost + child_h, // f_value of the child, used for computing the policy
+            		   	   	 f_child,
                              state,      // parent pruning
                              bound, current_g + move_cost,
 							 depth + 1, p + log2(*iterator_probs)) )
