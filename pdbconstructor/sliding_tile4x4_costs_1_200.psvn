@@ -1,0 +1,57 @@
+DOMAIN tile 16
+	B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+
+16
+
+tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile 
+
+X - - - B - - - - - - - - - - - => B - - - X - - - - - - - - - - - LABEL UP COST 152
+- X - - - B - - - - - - - - - - => - B - - - X - - - - - - - - - - LABEL UP COST 30
+- - X - - - B - - - - - - - - - => - - B - - - X - - - - - - - - - LABEL UP COST 45
+- - - X - - - B - - - - - - - - => - - - B - - - X - - - - - - - - LABEL UP COST 191
+- - - - X - - - B - - - - - - - => - - - - B - - - X - - - - - - - LABEL UP COST 104
+- - - - - X - - - B - - - - - - => - - - - - B - - - X - - - - - - LABEL UP COST 130
+- - - - - - X - - - B - - - - - => - - - - - - B - - - X - - - - - LABEL UP COST 28
+- - - - - - - X - - - B - - - - => - - - - - - - B - - - X - - - - LABEL UP COST 174
+- - - - - - - - X - - - B - - - => - - - - - - - - B - - - X - - - LABEL UP COST 177
+- - - - - - - - - X - - - B - - => - - - - - - - - - B - - - X - - LABEL UP COST 94
+- - - - - - - - - - X - - - B - => - - - - - - - - - - B - - - X - LABEL UP COST 31
+- - - - - - - - - - - X - - - B => - - - - - - - - - - - B - - - X LABEL UP COST 117
+X B - - - - - - - - - - - - - - => B X - - - - - - - - - - - - - - LABEL LEFT COST 100
+- X B - - - - - - - - - - - - - => - B X - - - - - - - - - - - - - LABEL LEFT COST 130
+- - X B - - - - - - - - - - - - => - - B X - - - - - - - - - - - - LABEL LEFT COST 96
+- - - - X B - - - - - - - - - - => - - - - B X - - - - - - - - - - LABEL LEFT COST 74
+- - - - - X B - - - - - - - - - => - - - - - B X - - - - - - - - - LABEL LEFT COST 58
+- - - - - - X B - - - - - - - - => - - - - - - B X - - - - - - - - LABEL LEFT COST 25
+- - - - - - - - X B - - - - - - => - - - - - - - - B X - - - - - - LABEL LEFT COST 119
+- - - - - - - - - X B - - - - - => - - - - - - - - - B X - - - - - LABEL LEFT COST 30
+- - - - - - - - - - X B - - - - => - - - - - - - - - - B X - - - - LABEL LEFT COST 54
+- - - - - - - - - - - - X B - - => - - - - - - - - - - - - B X - - LABEL LEFT COST 2
+- - - - - - - - - - - - - X B - => - - - - - - - - - - - - - B X - LABEL LEFT COST 46
+- - - - - - - - - - - - - - X B => - - - - - - - - - - - - - - B X LABEL LEFT COST 176
+B X - - - - - - - - - - - - - - => X B - - - - - - - - - - - - - - LABEL RIGHT COST 162
+- B X - - - - - - - - - - - - - => - X B - - - - - - - - - - - - - LABEL RIGHT COST 95
+- - B X - - - - - - - - - - - - => - - X B - - - - - - - - - - - - LABEL RIGHT COST 83
+- - - - B X - - - - - - - - - - => - - - - X B - - - - - - - - - - LABEL RIGHT COST 199
+- - - - - B X - - - - - - - - - => - - - - - X B - - - - - - - - - LABEL RIGHT COST 90
+- - - - - - B X - - - - - - - - => - - - - - - X B - - - - - - - - LABEL RIGHT COST 168
+- - - - - - - - B X - - - - - - => - - - - - - - - X B - - - - - - LABEL RIGHT COST 155
+- - - - - - - - - B X - - - - - => - - - - - - - - - X B - - - - - LABEL RIGHT COST 24
+- - - - - - - - - - B X - - - - => - - - - - - - - - - X B - - - - LABEL RIGHT COST 63
+- - - - - - - - - - - - B X - - => - - - - - - - - - - - - X B - - LABEL RIGHT COST 108
+- - - - - - - - - - - - - B X - => - - - - - - - - - - - - - X B - LABEL RIGHT COST 173
+- - - - - - - - - - - - - - B X => - - - - - - - - - - - - - - X B LABEL RIGHT COST 51
+B - - - X - - - - - - - - - - - => X - - - B - - - - - - - - - - - LABEL DOWN COST 16
+- B - - - X - - - - - - - - - - => - X - - - B - - - - - - - - - - LABEL DOWN COST 5
+- - B - - - X - - - - - - - - - => - - X - - - B - - - - - - - - - LABEL DOWN COST 130
+- - - B - - - X - - - - - - - - => - - - X - - - B - - - - - - - - LABEL DOWN COST 99
+- - - - B - - - X - - - - - - - => - - - - X - - - B - - - - - - - LABEL DOWN COST 99
+- - - - - B - - - X - - - - - - => - - - - - X - - - B - - - - - - LABEL DOWN COST 187
+- - - - - - B - - - X - - - - - => - - - - - - X - - - B - - - - - LABEL DOWN COST 139
+- - - - - - - B - - - X - - - - => - - - - - - - X - - - B - - - - LABEL DOWN COST 198
+- - - - - - - - B - - - X - - - => - - - - - - - - X - - - B - - - LABEL DOWN COST 32
+- - - - - - - - - B - - - X - - => - - - - - - - - - X - - - B - - LABEL DOWN COST 4
+- - - - - - - - - - B - - - X - => - - - - - - - - - - X - - - B - LABEL DOWN COST 69
+- - - - - - - - - - - B - - - X => - - - - - - - - - - - X - - - B LABEL DOWN COST 137
+
+GOAL B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 

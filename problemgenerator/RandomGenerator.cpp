@@ -34,7 +34,7 @@ int random_state( state_t *state, CRandomMersenne * RandGen )
   c = &child;
 
   random_goal_state( state );
-  max_i = 100000;
+  max_i = 100;
 
    for( i = 0; i < max_i; ++i ) {
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
 	int numberSamples = atoi( argv[1] );
 	string outputFile( argv[2] );
-	int singleFile = atoi( argv[1] );
+	int singleFile = atoi( argv[3] );
 
 	CRandomMersenne * RanGen = new CRandomMersenne( ( unsigned )time( NULL ) );
 
