@@ -34,36 +34,40 @@ void set_temperature_to_max_operator_cost()
 	//cout << "Setting temperature to: " << temperature << endl;
 }
 
-void compute_f_values(const AbstractionHeuristic * heuristic, const state_t* parent, const state_t *state, vector<int>& f_values, const int current_g)
+void compute_f_values(const AbstractionHeuristic * heuristic, const state_t* parent, const state_t *state, int* f_values, const int current_g,
+		state_t *children, int *move_costs, int & num_children)
 {
     int rule_used;
     func_ptr iter;
-    state_t child;
 
     init_fwd_iter( iter );
     while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
-        apply_fwd_rule( rule_used, state, &child );
+    	apply_fwd_rule( rule_used, state, &children[num_children] );
 
-        if( compare_states( &child, parent ) == 0 )   // parent pruning
+        if( compare_states( &children[num_children], parent ) == 0 )   // parent pruning
             continue;
 
         const int move_cost = fwd_rule_costs[ rule_used ];
-        int child_f = heuristic->abstraction_data_lookup( &child ) + current_g + move_cost;
-        f_values.push_back(child_f);
+        int child_f = heuristic->abstraction_data_lookup( &children[num_children] ) + current_g + move_cost;
+        f_values[num_children] = child_f;
+
+        move_costs[num_children] = move_cost;
+        num_children++;
     }
 }
 
-void compute_probability_distribution_from_values(vector<int>& f_values, vector<float>& probs, const int f_value_parent)
+void compute_probability_distribution_from_values(int* f_values, float* probs, const int f_value_parent, const int num_children)
 {
 	float den = 0.0;
-	for(vector<int>::iterator it = f_values.begin(); it != f_values.end(); ++it)
+
+	for(int i = 0; i < num_children; i++)
 	{
-		den += exp((f_value_parent - *it)/temperature);
+		den += exp((f_value_parent - f_values[i])/temperature);
 	}
 
-	for(vector<int>::iterator it = f_values.begin(); it != f_values.end(); ++it)
+	for(int i = 0; i < num_children; i++)
 	{
-		probs.push_back(exp((f_value_parent - *it)/temperature)/den);
+		probs[i] = (exp((f_value_parent - f_values[i])/temperature)/den);
 	}
 }
 
@@ -77,52 +81,42 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     int rule_used;
     func_ptr iter;
     state_t child;
+    state_t children[NUM_FWD_RULES];
+    int move_costs[NUM_FWD_RULES];
+    int f_values_children[NUM_FWD_RULES];
+    float probability_distribution[NUM_FWD_RULES];
+    int num_children = 0;
 
     nodes_expanded_for_bound++;
 
     //Computing the number of children and their f_values
-    vector<int> f_values_children;
-    vector<float> probability_distribution;
-    compute_f_values(heuristic, parent_state, state, f_values_children, current_g);
-    compute_probability_distribution_from_values(f_values_children, probability_distribution, f_state);
+    compute_f_values(heuristic, parent_state, state, f_values_children, current_g, children, move_costs, num_children);
+    compute_probability_distribution_from_values(f_values_children, probability_distribution, f_state, num_children);
 
-    init_fwd_iter( iter );
-    vector<float>::iterator iterator_probs = probability_distribution.begin();
-    int child_count = 0;
-    while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
-        apply_fwd_rule( rule_used, state, &child );
+    for(int child_count = 0; child_count < num_children; child_count++) {
         nodes_generated_for_bound++;
+        const int move_cost = move_costs[child_count];
 
-        if( compare_states( &child, parent_state ) == 0 )   // parent pruning
-            continue;
-
-        const int move_cost = fwd_rule_costs[ rule_used ];
-
-        if (is_goal(&child)) {
+        if(is_goal(&children[child_count])) {
         	solution_cost = current_g + move_cost;
         	return 1;
         } else {
-            //int child_h = heuristic->abstraction_data_lookup( &child );
         	int f_child = f_values_children[child_count];
-        	child_count++;
 
             float v = log2(depth) - p;
 
             if(v <= bound)
             {
-               if( dfs_heur( heuristic, &child,
-            		         //current_g + move_cost + child_h, // f_value of the child, used for computing the policy
+               if( dfs_heur( heuristic, &children[child_count],
             		   	   	 f_child,
                              state,      // parent pruning
                              bound, current_g + move_cost,
-							 depth + 1, p + log2(*iterator_probs)) )
+							 depth + 1, p + log2(probability_distribution[child_count])) )
                {
                    return 1;
                }
             }
         }
-
-        iterator_probs++;
     }
 
     return 0;
