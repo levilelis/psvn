@@ -1,0 +1,35 @@
+# 3x3 sliding tile puzzle
+
+DOMAIN tile 9
+       B 1 2 3 4 5 6 7 8
+
+9
+
+tile tile tile tile tile tile tile tile tile
+
+B X - - - - - - - => X B - - - - - - - LABEL LEFT COST 100000
+B - - X - - - - - => X - - B - - - - - LABEL UP COST 141421
+X B - - - - - - - => B X - - - - - - - LABEL RIGHT COST 237281
+- B - - X - - - - => - X - - B - - - - LABEL UP COST 332919
+- B X - - - - - - => - X B - - - - - - LABEL LEFT COST 283746
+- X B - - - - - - => - B X - - - - - - LABEL RIGHT COST 221237
+- - B - - X - - - => - - X - - B - - - LABEL UP COST 645382
+X - - B - - - - - => B - - X - - - - - LABEL DOWN COST 223482
+- - - B X - - - - => - - - X B - - - - LABEL LEFT COST 447283
+- - - B - - X - - => - - - X - - B - - LABEL UP COST 293485
+- - - X B - - - - => - - - B X - - - - LABEL RIGHT COST 982731 
+- X - - B - - - - => - B - - X - - - - LABEL DOWN COST 273927
+- - - - B X - - - => - - - - X B - - - LABEL LEFT COST 767122
+- - - - B - - X - => - - - - X - - B - LABEL UP COST 821732
+- - - - X B - - - => - - - - B X - - - LABEL RIGHT COST 726280
+- - X - - B - - - => - - B - - X - - - LABEL DOWN COST 817283
+- - - - - B - - X => - - - - - X - - B LABEL UP COST 124239
+- - - X - - B - - => - - - B - - X - - LABEL DOWN COST 538261
+- - - - - - B X - => - - - - - - X B - LABEL LEFT COST 928371
+- - - - - - X B - => - - - - - - B X - LABEL RIGHT COST 123772
+- - - - X - - B - => - - - - B - - X - LABEL DOWN COST 143438
+- - - - - - - B X => - - - - - - - X B LABEL LEFT COST 827432
+- - - - - - - X B => - - - - - - - B X LABEL RIGHT COST 274921
+- - - - - X - - B => - - - - - B - - X LABEL DOWN COST 237239
+
+GOAL B 1 2 3 4 5 6 7 8
