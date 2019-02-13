@@ -108,23 +108,16 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     int largest_k = 0;
 
-   // int n_lower = 1;
-   // int n_upper = 0;
-
     best_soln_sofar = INT_MAX;
 
     bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
     lower[0] = bound;
-    //cout << "h-value of start state: " << bound << endl;
 
     int j = 0; //index of the A6519 sequence being accessed
-    int v = 0;
     while (1) {
     	j += 1;
 
-    	//if(j > 10) break;
     	int k = log2(A6519(j));
-    	//cout << "j: " << j << " k: " << k << endl;
 
     	if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
     		lower[k] = lower[k-1];
@@ -139,9 +132,6 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
         budget = pow(2, k);
 
-        //if(budget > 1000)
-        //cout << "j: " << j << " b: " << bound << " budget: " << budget << " best: " << best_soln_sofar << " k: " << k << " n_upper: " << n_upper
-		//	<< " n_lower: " << n_lower << " lower: " << lower[k] << " upper: " << upper[k] << endl;
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
                              bound, 0,
@@ -157,31 +147,8 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         	upper[k] = bound;
         } else {
         	lower[k] = bound;
-        	//cout << "bound was too tight, n_lower: " << n_lower << endl;
         }
-
-       /* cout << "Lower: " << n_lower << endl;;
-        for(int i = 0; i < n_lower; i++)
-        	cout << lower[i] << " ";
-        cout << endl;
-        cout << "Upper: " << n_upper << endl;
-        for(int i = 0; i < n_upper; i++)
-        	cout << upper[i] << " ";
-        cout << endl;
-        cout << endl;
-*/
-        //if( done == 1 ) {
-        //    break;
-        //}
-
-        //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
-        //bound = next_bound;
     }
-
-    //cout << "Best solutiion to be returned: " << best_soln_sofar << endl;
-    //cout << "n_lower: " << n_lower << endl;
-    //cout << "n_upper: " << n_upper << endl;
-    //cout << "largest k: " << largest_k << endl;
 
     return best_soln_sofar;
 }
