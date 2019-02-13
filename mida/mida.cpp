@@ -51,6 +51,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
         if (is_goal(&child)) {
             best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
+            //cout << "Found goal: " << best_soln_sofar << endl;
             if (best_soln_sofar <= bound) {
             	if(optimal)
             		return 0;
@@ -97,11 +98,18 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
 
-    long upper[50];
-    long lower[50];
+    long upper[51];
+    long lower[51];
 
-    int n_lower = 1;
-    int n_upper = 0;
+    for(int i = 0; i < 51; i++) {
+    	upper[i] = -1;
+    	lower[i] = -1;
+    }
+
+    int largest_k = 0;
+
+   // int n_lower = 1;
+   // int n_upper = 0;
 
     best_soln_sofar = INT_MAX;
 
@@ -118,14 +126,10 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     	int k = log2(A6519(j));
     	//cout << "j: " << j << " k: " << k << endl;
 
-    	if(k >= n_lower || (k - 1 >= 0 && lower[k] < lower[k-1])) {
+    	if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
     		lower[k] = lower[k-1];
 
-    		if(n_lower - 1 < k)
-    			n_lower++;
-    	}
-
-    	if(k < n_upper)
+    	if(upper[k] != -1)
     		bound = (upper[k] + lower[k])/2;
     	else
     		bound = 2*lower[k];
@@ -136,7 +140,8 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         budget = pow(2, k);
 
         //if(budget > 1000)
-        //cout << "bound: " << bound << " budget: " << budget << endl;
+        //cout << "j: " << j << " b: " << bound << " budget: " << budget << " best: " << best_soln_sofar << " k: " << k << " n_upper: " << n_upper
+		//	<< " n_lower: " << n_lower << " lower: " << lower[k] << " upper: " << upper[k] << endl;
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
                              bound, 0,
@@ -150,17 +155,8 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
             break;
         if( done == -1) { //We have exhausted the search budget
         	upper[k] = bound;
-        	if(n_upper - 1 < k)
-        		n_upper++;
-        	//cout << "ran short on budget, n_upper: " << n_upper << endl;
-        	v += 1;
         } else {
         	lower[k] = bound;
-        	if(n_lower - 1 < k)
-        	{
-        		//cout << "Increasing n_lower, k: " << k << " n_lower: " << n_lower << endl;
-        		n_lower++;
-        	}
         	//cout << "bound was too tight, n_lower: " << n_lower << endl;
         }
 
@@ -182,7 +178,10 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         //bound = next_bound;
     }
 
-    cout << "Best solutiion to be returned: " << best_soln_sofar << endl;
+    //cout << "Best solutiion to be returned: " << best_soln_sofar << endl;
+    //cout << "n_lower: " << n_lower << endl;
+    //cout << "n_upper: " << n_upper << endl;
+    //cout << "largest k: " << largest_k << endl;
 
     return best_soln_sofar;
 }
@@ -224,7 +223,7 @@ int main( int argc, char **argv )
          ++trials ) {
 
 //        printf( "problem %d: ", trials + 1 );
-   //     print_state( stdout, &state );
+        print_state( stdout, &state );
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
@@ -247,7 +246,7 @@ int main( int argc, char **argv )
         total.tv_sec = total.tv_sec + end.tv_sec;
 
         if ( d == INT_MAX ) {
-        	cout << "d: " << d << endl;
+        	cout << "d: " << d << " INTMAX: " << INT_MAX << endl;
             printf( "no solution found. expanded nodes: %" PRId64 ", generated nodes: %" PRId64 "\n",
 		      nodes_expanded_for_startstate, nodes_generated_for_startstate );
         } else {
