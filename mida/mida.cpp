@@ -49,16 +49,10 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
         const int move_cost = fwd_rule_costs[ rule_used ];
 
-        if (is_goal(&child)) {
+        if (is_goal(&child) && current_g + move_cost <= bound) {
             best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
-            //cout << "Found goal: " << best_soln_sofar << endl;
-            if (best_soln_sofar <= bound) {
-            	if(optimal)
-            		return 0;
-               return 1;
-            } else {
-               continue;
-            }
+            if(!optimal)
+            	return 1;
         } else {
             int child_h = heuristic->abstraction_data_lookup( &child );
             int child_f = current_g + move_cost + child_h;
@@ -190,7 +184,7 @@ int main( int argc, char **argv )
          ++trials ) {
 
 //        printf( "problem %d: ", trials + 1 );
-        print_state( stdout, &state );
+  //      print_state( stdout, &state );
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
