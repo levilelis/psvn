@@ -41,7 +41,7 @@ void find_minimum_operator_cost()
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const int bound, int *next_bound, int current_g )
+              const int bound, int *next_bound, int current_g, int optimal )
 {
     int rule_used;
     func_ptr iter;
@@ -65,14 +65,17 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
         if (is_goal(&child)) {
             best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
             if (best_soln_sofar <= bound) {
+            	if(optimal)
+            		return 0;
                return 1;
             } else {
                continue;
             }
         } else {
             int child_h = heuristic->abstraction_data_lookup( &child );
+            int child_f = current_g + move_cost + child_h;
 
-            if (current_g + move_cost + child_h > bound) {
+            if (child_f > bound || child_f >= best_soln_sofar) {
                *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
             } else {
                is_leaf = false;
@@ -81,10 +84,10 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                if( dfs_heur( heuristic, &child,
                              state,      // parent pruning
-                             bound, next_bound, current_g + move_cost ) )
+                             bound, next_bound, current_g + move_cost, optimal ) )
                {
                    return 1;
-                }
+               }
             }
         }
     }
@@ -94,7 +97,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     if (max_branching_fator_for_bound < local_b)
     	max_branching_fator_for_bound = local_b;
 
-    assert( *next_bound > bound );
+    //assert( *next_bound > bound );
     return 0;
 }
 
@@ -121,14 +124,15 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         max_branching_fator_for_bound = 0;
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
-                             bound, &next_bound, 0 );
+                             bound, &next_bound, 0,
+							 1 ); // optimal search
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
         if( done ) {
             break;
         }
-        assert( next_bound > bound );
+        //assert( next_bound > bound );
 
         int optimistic_bound =  (long) (bound + min_cost * (2 * (log(nodes_expanded_for_bound - 1) / log(max_branching_fator_for_bound)) - (log(leaf_nodes_for_bound)/log(max_branching_fator_for_bound))));
 
