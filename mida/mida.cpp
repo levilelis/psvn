@@ -27,16 +27,13 @@ int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solu
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
 int best_soln_sofar = INT_MAX;
 long budget = 0;
-int MAX_DEPTH = 10000;
 long global_bound;
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const int bound, int current_g, int depth, int optimal )
+              const int bound, int current_g, int optimal )
 {
-	if (depth > MAX_DEPTH) { return 0; }
-
     int rule_used;
     func_ptr iter;
     state_t child;
@@ -70,7 +67,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                 int res = dfs_heur( heuristic, &child,
                         state,      // parent pruning
-                        bound, current_g + move_cost, depth + 1, optimal );
+                        bound, current_g + move_cost, optimal );
                 if (res == -1)
                 	return -1; //out of search budget
                 if (res == 1)
@@ -82,7 +79,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     return 0;
 }
 
-int A6519(int j) {
+long A6519(long j) {
     return ((j ^ j-1) + 1) / 2;
 }
 
@@ -138,7 +135,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
-                             bound, 0, 0,
+                             bound, 0,
 							 1 ); // optimal search
 
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
