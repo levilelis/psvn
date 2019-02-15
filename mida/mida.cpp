@@ -87,6 +87,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 	if (is_goal(state)) { return 0; }
 
 	long bound;
+	long global_lower_bound;
 	int done;
 
     nodes_expanded_for_startstate  = 0;
@@ -104,7 +105,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     best_soln_sofar = INT_MAX;
 
-    bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
+    bound = global_lower_bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
     lower[0] = bound;
 
     int j = 0; //index of the A6519 sequence being accessed
@@ -113,16 +114,19 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     	int k = log2(A6519(j));
 
-    	if(upper[k] != -1 && lower[k+1] != -1 && upper[k] < lower[k+1])
+    	//if(upper[k] != -1 && lower[k+1] != -1 && upper[k] < lower[k])
+    	if(upper[k] != -1 && upper[k] < global_lower_bound)
     		continue;
 
-    	if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
-    		lower[k] = lower[k-1];
+    	//if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
+    	//	lower[k] = lower[k-1];
 
     	if(upper[k] != -1)
-    		bound = (upper[k] + lower[k])/2;
+    		//bound = (upper[k] + lower[k])/2;
+    		bound = (upper[k] + global_lower_bound)/2;
     	else
-    		bound = 2*lower[k];
+    		bound = 2*global_lower_bound;
+    		//bound = 2*lower[k];
 
         nodes_expanded_for_bound  = 0;
         nodes_generated_for_bound = 0;
@@ -143,7 +147,9 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         if( done == -1) { //We have exhausted the search budget
         	upper[k] = bound;
         } else {
-        	lower[k] = bound;
+        	//lower[k] = bound;
+        	if(bound > global_lower_bound)
+        		global_lower_bound = bound;
         }
     }
 
