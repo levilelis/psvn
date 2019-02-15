@@ -27,12 +27,16 @@ int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solu
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
 int best_soln_sofar = INT_MAX;
 long budget = 0;
+int MAX_DEPTH = 10000;
+long global_bound;
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const int bound, int current_g, int optimal )
+              const int bound, int current_g, int depth, int optimal )
 {
+	if (depth > MAX_DEPTH) { return 0; }
+
     int rule_used;
     func_ptr iter;
     state_t child;
@@ -66,7 +70,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                 int res = dfs_heur( heuristic, &child,
                         state,      // parent pruning
-                        bound, current_g + move_cost, optimal );
+                        bound, current_g + move_cost, depth + 1, optimal );
                 if (res == -1)
                 	return -1; //out of search budget
                 if (res == 1)
@@ -87,26 +91,25 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 	if (is_goal(state)) { return 0; }
 
 	long bound;
-	long global_lower_bound;
 	int done;
 
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
 
     long upper[51];
-    long lower[51];
+    //long lower[51];
 
     for(int i = 0; i < 51; i++) {
     	upper[i] = -1;
-    	lower[i] = -1;
+    	//lower[i] = -1;
     }
 
     int largest_k = 0;
 
     best_soln_sofar = INT_MAX;
 
-    bound = global_lower_bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
-    lower[0] = bound;
+    bound = global_bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
+    //lower[0] = bound;
 
     int j = 0; //index of the A6519 sequence being accessed
     while (1) {
@@ -114,18 +117,18 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     	int k = log2(A6519(j));
 
-    	//if(upper[k] != -1 && lower[k+1] != -1 && upper[k] < lower[k])
-    	if(upper[k] != -1 && upper[k] < global_lower_bound)
+    	//if(upper[k] != -1 && lower[k] != -1 && upper[k] < lower[k+1])
+    	if(upper[k] != -1 && upper[k] < global_bound)
     		continue;
 
     	//if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
     	//	lower[k] = lower[k-1];
 
     	if(upper[k] != -1)
+    		bound = (upper[k] + global_bound)/2;
     		//bound = (upper[k] + lower[k])/2;
-    		bound = (upper[k] + global_lower_bound)/2;
     	else
-    		bound = 2*global_lower_bound;
+    		bound = 2*global_bound;
     		//bound = 2*lower[k];
 
         nodes_expanded_for_bound  = 0;
@@ -135,7 +138,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
-                             bound, 0,
+                             bound, 0, 0,
 							 1 ); // optimal search
 
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
@@ -148,8 +151,9 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         	upper[k] = bound;
         } else {
         	//lower[k] = bound;
-        	if(bound > global_lower_bound)
-        		global_lower_bound = bound;
+        	if(bound > global_bound) {
+        		global_bound = bound;
+        	}
         }
     }
 
