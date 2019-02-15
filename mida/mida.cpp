@@ -113,6 +113,9 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     	int k = log2(A6519(j));
 
+    	if(upper[k] != -1 && lower[k+1] != -1 && upper[k] < lower[k+1])
+    		continue;
+
     	if(lower[k] == -1 || (k - 1 >= 0 && lower[k] < lower[k-1]))
     		lower[k] = lower[k-1];
 
