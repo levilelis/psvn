@@ -36,6 +36,8 @@ void find_minimum_operator_cost()
 		if(fwd_rule_costs[i] < min_cost)
 			min_cost = fwd_rule_costs[i];
 	}
+
+	min_cost = 1;
 }
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
