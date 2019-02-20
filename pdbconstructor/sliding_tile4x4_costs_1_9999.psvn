@@ -1,0 +1,57 @@
+DOMAIN tile 16
+	B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+
+16
+
+tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile tile 
+
+X - - - B - - - - - - - - - - - => B - - - X - - - - - - - - - - - LABEL UP COST 2671
+- X - - - B - - - - - - - - - - => - B - - - X - - - - - - - - - - LABEL UP COST 4507
+- - X - - - B - - - - - - - - - => - - B - - - X - - - - - - - - - LABEL UP COST 1982
+- - - X - - - B - - - - - - - - => - - - B - - - X - - - - - - - - LABEL UP COST 4988
+- - - - X - - - B - - - - - - - => - - - - B - - - X - - - - - - - LABEL UP COST 3023
+- - - - - X - - - B - - - - - - => - - - - - B - - - X - - - - - - LABEL UP COST 1390
+- - - - - - X - - - B - - - - - => - - - - - - B - - - X - - - - - LABEL UP COST 3947
+- - - - - - - X - - - B - - - - => - - - - - - - B - - - X - - - - LABEL UP COST 311
+- - - - - - - - X - - - B - - - => - - - - - - - - B - - - X - - - LABEL UP COST 1120
+- - - - - - - - - X - - - B - - => - - - - - - - - - B - - - X - - LABEL UP COST 1773
+- - - - - - - - - - X - - - B - => - - - - - - - - - - B - - - X - LABEL UP COST 1070
+- - - - - - - - - - - X - - - B => - - - - - - - - - - - B - - - X LABEL UP COST 2047
+X B - - - - - - - - - - - - - - => B X - - - - - - - - - - - - - - LABEL LEFT COST 6290
+- X B - - - - - - - - - - - - - => - B X - - - - - - - - - - - - - LABEL LEFT COST 3408
+- - X B - - - - - - - - - - - - => - - B X - - - - - - - - - - - - LABEL LEFT COST 9922
+- - - - X B - - - - - - - - - - => - - - - B X - - - - - - - - - - LABEL LEFT COST 5183
+- - - - - X B - - - - - - - - - => - - - - - B X - - - - - - - - - LABEL LEFT COST 2602
+- - - - - - X B - - - - - - - - => - - - - - - B X - - - - - - - - LABEL LEFT COST 6092
+- - - - - - - - X B - - - - - - => - - - - - - - - B X - - - - - - LABEL LEFT COST 7835
+- - - - - - - - - X B - - - - - => - - - - - - - - - B X - - - - - LABEL LEFT COST 2248
+- - - - - - - - - - X B - - - - => - - - - - - - - - - B X - - - - LABEL LEFT COST 7048
+- - - - - - - - - - - - X B - - => - - - - - - - - - - - - B X - - LABEL LEFT COST 8958
+- - - - - - - - - - - - - X B - => - - - - - - - - - - - - - B X - LABEL LEFT COST 4045
+- - - - - - - - - - - - - - X B => - - - - - - - - - - - - - - B X LABEL LEFT COST 5202
+B X - - - - - - - - - - - - - - => X B - - - - - - - - - - - - - - LABEL RIGHT COST 8261
+- B X - - - - - - - - - - - - - => - X B - - - - - - - - - - - - - LABEL RIGHT COST 6563
+- - B X - - - - - - - - - - - - => - - X B - - - - - - - - - - - - LABEL RIGHT COST 2199
+- - - - B X - - - - - - - - - - => - - - - X B - - - - - - - - - - LABEL RIGHT COST 6261
+- - - - - B X - - - - - - - - - => - - - - - X B - - - - - - - - - LABEL RIGHT COST 3620
+- - - - - - B X - - - - - - - - => - - - - - - X B - - - - - - - - LABEL RIGHT COST 6555
+- - - - - - - - B X - - - - - - => - - - - - - - - X B - - - - - - LABEL RIGHT COST 4084
+- - - - - - - - - B X - - - - - => - - - - - - - - - X B - - - - - LABEL RIGHT COST 9386
+- - - - - - - - - - B X - - - - => - - - - - - - - - - X B - - - - LABEL RIGHT COST 5456
+- - - - - - - - - - - - B X - - => - - - - - - - - - - - - X B - - LABEL RIGHT COST 2837
+- - - - - - - - - - - - - B X - => - - - - - - - - - - - - - X B - LABEL RIGHT COST 2364
+- - - - - - - - - - - - - - B X => - - - - - - - - - - - - - - X B LABEL RIGHT COST 4552
+B - - - X - - - - - - - - - - - => X - - - B - - - - - - - - - - - LABEL DOWN COST 6129
+- B - - - X - - - - - - - - - - => - X - - - B - - - - - - - - - - LABEL DOWN COST 9111
+- - B - - - X - - - - - - - - - => - - X - - - B - - - - - - - - - LABEL DOWN COST 562
+- - - B - - - X - - - - - - - - => - - - X - - - B - - - - - - - - LABEL DOWN COST 9556
+- - - - B - - - X - - - - - - - => - - - - X - - - B - - - - - - - LABEL DOWN COST 5588
+- - - - - B - - - X - - - - - - => - - - - - X - - - B - - - - - - LABEL DOWN COST 9670
+- - - - - - B - - - X - - - - - => - - - - - - X - - - B - - - - - LABEL DOWN COST 5003
+- - - - - - - B - - - X - - - - => - - - - - - - X - - - B - - - - LABEL DOWN COST 4298
+- - - - - - - - B - - - X - - - => - - - - - - - - X - - - B - - - LABEL DOWN COST 5364
+- - - - - - - - - B - - - X - - => - - - - - - - - - X - - - B - - LABEL DOWN COST 7641
+- - - - - - - - - - B - - - X - => - - - - - - - - - - X - - - B - LABEL DOWN COST 9589
+- - - - - - - - - - - B - - - X => - - - - - - - - - - - X - - - B LABEL DOWN COST 2199
+
+GOAL B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
