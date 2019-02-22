@@ -144,6 +144,9 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     if(dfs_heur(heuristic, state, state, lower, &up_min, 0, 0)) //regular IDA* search, no budget
     	return best_soln_sofar;
 
+    nodes_expanded_for_startstate  += nodes_expanded_for_bound;
+    nodes_generated_for_startstate += nodes_generated_for_bound;
+
     long N0 = nodes_expanded_for_bound;
 
     int k = 0;
@@ -266,6 +269,5 @@ int main( int argc, char **argv )
 
     return EXIT_SUCCESS;
 }
-
 
 
