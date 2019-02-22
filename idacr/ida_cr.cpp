@@ -32,7 +32,7 @@ const int MAX_BUCKET = 50;
 int buckets[MAX_BUCKET];
 
 int get_bucket_index(int child_f, int bound) {
-	for(float i = 0; i < MAX_BUCKET; i++) {
+	for(int i = 0; i < MAX_BUCKET; i++) {
 		if(child_f > bound * (1 + i/100.0) && child_f <= bound * (1 + (i + 1)/100.0)) {
 			return i;
 		}
@@ -73,7 +73,6 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             if (child_f > bound || child_f >= best_soln_sofar) {
                //increment bucket
             	int index = get_bucket_index(child_f, bound);
-            	//cout << "Child f: " << child_f << " bound: " << bound << " index: " << index << endl;
             	if(index >= 0)
             		buckets[index]++;
             } else {
@@ -131,8 +130,8 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
 
         long sum_bucket = 0;
         long target = pow(2, k);
-        float index = -1;
-        float last_incremented_index = -1;
+        int index = -1;
+        int last_incremented_index = -1;
         for(int i = 0; i < MAX_BUCKET; i++) {
         	sum_bucket += buckets[i];
 
