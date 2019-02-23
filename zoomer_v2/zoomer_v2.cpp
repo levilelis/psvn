@@ -143,8 +143,11 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     long lower = heuristic->abstraction_data_lookup( state );
 
     budget = INT_MAX; //infinity search budget
-    if(dfs_heur(heuristic, state, state, lower, &up_min, 0, 0)) //regular IDA* search, no budget
+    if(dfs_heur(heuristic, state, state, lower, &up_min, 0, 0)) { //regular IDA* search, no budget
+    	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
+    	nodes_generated_for_startstate += nodes_generated_for_bound;
     	return best_soln_sofar;
+    }
 
     nodes_expanded_for_startstate  += nodes_expanded_for_bound;
     nodes_generated_for_startstate += nodes_generated_for_bound;
