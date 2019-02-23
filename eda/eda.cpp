@@ -54,9 +54,6 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     	return INT_MAX;
 
     nodes_expanded_for_bound++;
-    bool is_leaf = true;
-
-    int local_b = 0;
 
     init_fwd_iter( iter );
     while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
