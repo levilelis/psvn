@@ -135,6 +135,8 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     best_soln_sofar = INT_MAX;
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
+    nodes_expanded_for_bound  = 0;
+    nodes_generated_for_bound = 0;
 
     long upper;
     long up_min = INT_MAX;
