@@ -25,54 +25,10 @@ int64_t leaf_nodes_for_bound ;    // number of leaf nodes for a given cost bound
 int64_t nodes_generated_for_bound ;   // number of nodes generated for a given cost bound
 int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solution found for a given start state
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
+int64_t max_time_seconds; //maximum running time in seconds
 int best_soln_sofar = INT_MAX;
 long budget = 0;
-/*
-int ida_dfs( const AbstractionHeuristic * heuristic,
-              const state_t *state,
-              const state_t *parent_state, // for parent pruning
-              const long bound, long *next_bound, long current_g )
-{
-    int rule_used;
-    func_ptr iter;
-    state_t child;
-
-    nodes_expanded_for_bound++;
-
-    init_fwd_iter( iter );
-    while( ( rule_used = next_fwd_iter( iter, state ) ) >= 0 ) {
-        apply_fwd_rule( rule_used, state, &child );
-        nodes_generated_for_bound++;
-
-        if( compare_states( &child, parent_state ) == 0 )   // parent pruning
-            continue;
-
-        const int move_cost = fwd_rule_costs[ rule_used ];
-
-        if (is_goal(&child)) {
-            best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
-            if (best_soln_sofar <= bound) {
-               return 1;
-            } else {
-               continue;
-            }
-        } else {
-            int child_h = heuristic->abstraction_data_lookup( &child );
-
-            if (current_g + move_cost + child_h > bound) {
-               *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
-            } else {
-               if( dfs_heur( heuristic, &child, state,      // parent pruning
-                             bound, next_bound, current_g + move_cost ) )
-               {
-                   return 1;
-               }
-            }
-        }
-    }
-    assert( *next_bound > bound );
-    return 0;
-}*/
+struct timeval start, end_time, total;
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
@@ -82,6 +38,10 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     int rule_used;
     func_ptr iter;
     state_t child;
+
+    gettimeofday( &end_time, NULL );
+    if(end_time.tv_sec - start.tv_sec > max_time_seconds)
+    	return INT_MAX;
 
     nodes_expanded_for_bound++;
 
@@ -186,6 +146,10 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
             	lower = bound;
             	up_min = t;
             }
+
+            gettimeofday( &end_time, NULL );
+            if(end_time.tv_sec - start.tv_sec > max_time_seconds)
+            	return INT_MAX;
     	}
     }
 
@@ -201,14 +165,14 @@ int main( int argc, char **argv )
     //abstraction_data_t* abst;
 
     char line[ 4096 ];
-    struct timeval start, end, total;
+
     total.tv_sec = 0;
     total.tv_usec = 0;
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 2 ) {
-        printf("There must 1 command line argument, the prefix of the abstraction and pattern database to use.\n");
+    if( argc != 3 ) {
+        printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
         return EXIT_FAILURE;
     } else {
  /* read the abstraction and pattern database (state_map) */
@@ -217,6 +181,8 @@ int main( int argc, char **argv )
         if (heuristic == NULL) {
             return EXIT_FAILURE;
         }
+
+        max_time_seconds = stoi(argv[2]);
     }
 
     total_d = 0;
@@ -235,31 +201,31 @@ int main( int argc, char **argv )
 
         d = zoomer( heuristic, &state );
 
-        gettimeofday( &end, NULL );
-        end.tv_sec -= start.tv_sec;
-        end.tv_usec -= start.tv_usec;
-        if( end.tv_usec < 0 ) {
-            end.tv_usec += 1000000;
-            --end.tv_sec;
+        gettimeofday( &end_time, NULL );
+        end_time.tv_sec -= start.tv_sec;
+        end_time.tv_usec -= start.tv_usec;
+        if( end_time.tv_usec < 0 ) {
+        	end_time.tv_usec += 1000000;
+            --end_time.tv_sec;
         }
 
-        if (end.tv_usec + total.tv_usec >= 1000000) {
-            total.tv_usec = end.tv_usec + total.tv_usec - 1000000;
+        if (end_time.tv_usec + total.tv_usec >= 1000000) {
+            total.tv_usec = end_time.tv_usec + total.tv_usec - 1000000;
             total.tv_sec = total.tv_sec + 1;
         } else {
-            total.tv_usec = end.tv_usec + total.tv_usec;
+            total.tv_usec = end_time.tv_usec + total.tv_usec;
         }
-        total.tv_sec = total.tv_sec + end.tv_sec;
+        total.tv_sec = total.tv_sec + end_time.tv_sec;
 
         if ( d == INT_MAX ) {
-        	cout << "d: " << d << " INTMAX: " << INT_MAX << endl;
             printf( "no solution found. expanded nodes: %" PRId64 ", generated nodes: %" PRId64 "\n",
 		      nodes_expanded_for_startstate, nodes_generated_for_startstate );
         } else {
             printf( "cost: %d, expanded: %" PRId64 ", nodes: %" PRId64 "\n",
 		      d, nodes_expanded_for_startstate, nodes_generated_for_startstate );
         }
-        total_d += d;
+        if(d != INT_MAX)
+        	total_d += d;
         total_expanded  += nodes_expanded_for_startstate;
         total_generated += nodes_generated_for_startstate;
 

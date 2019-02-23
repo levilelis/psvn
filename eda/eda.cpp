@@ -25,9 +25,11 @@ int64_t leaf_nodes_for_bound ;    // number of leaf nodes for a given cost bound
 int64_t nodes_generated_for_bound ;   // number of nodes generated for a given cost bound
 int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solution found for a given start state
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
+int64_t max_time_seconds; //maximum running time in seconds
 int best_soln_sofar = INT_MAX;
 int min_cost = INT_MAX;
 int max_branching_fator_for_bound; //largest branching factor for a given cost bound
+struct timeval start, end_time, total;
 
 void find_minimum_operator_cost()
 {
@@ -46,6 +48,10 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     int rule_used;
     func_ptr iter;
     state_t child;
+
+    gettimeofday( &end_time, NULL );
+    if(end_time.tv_sec - start.tv_sec > max_time_seconds)
+    	return INT_MAX;
 
     nodes_expanded_for_bound++;
     bool is_leaf = true;
@@ -118,6 +124,10 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
             break;
         }
 
+        gettimeofday( &end_time, NULL );
+        if(end_time.tv_sec - start.tv_sec > max_time_seconds)
+        	return INT_MAX;
+
         if ( best_soln_sofar <= pow(2, k) ) { // will always be true if bound == INT_MAX
             break;
         }
@@ -137,14 +147,14 @@ int main( int argc, char **argv )
     //abstraction_data_t* abst;
 
     char line[ 4096 ];
-    struct timeval start, end, total;
+
     total.tv_sec = 0;
     total.tv_usec = 0;
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 2 ) {
-        printf("There must 1 command line argument, the prefix of the abstraction and pattern database to use.\n");
+    if( argc != 3 ) {
+        printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
         return EXIT_FAILURE;
     } else {
  /* read the abstraction and pattern database (state_map) */
@@ -153,6 +163,8 @@ int main( int argc, char **argv )
         if (heuristic == NULL) {
             return EXIT_FAILURE;
         }
+
+        max_time_seconds = stoi(argv[2]);
     }
 
     total_d = 0;
@@ -171,21 +183,21 @@ int main( int argc, char **argv )
 
         d = optimisticidastar( heuristic, &state );
 
-        gettimeofday( &end, NULL );
-        end.tv_sec -= start.tv_sec;
-        end.tv_usec -= start.tv_usec;
-        if( end.tv_usec < 0 ) {
-            end.tv_usec += 1000000;
-            --end.tv_sec;
+        gettimeofday( &end_time, NULL );
+        end_time.tv_sec -= start.tv_sec;
+        end_time.tv_usec -= start.tv_usec;
+        if( end_time.tv_usec < 0 ) {
+        	end_time.tv_usec += 1000000;
+            --end_time.tv_sec;
         }
 
-        if (end.tv_usec + total.tv_usec >= 1000000) {
-            total.tv_usec = end.tv_usec + total.tv_usec - 1000000;
+        if (end_time.tv_usec + total.tv_usec >= 1000000) {
+            total.tv_usec = end_time.tv_usec + total.tv_usec - 1000000;
             total.tv_sec = total.tv_sec + 1;
         } else {
-            total.tv_usec = end.tv_usec + total.tv_usec;
+            total.tv_usec = end_time.tv_usec + total.tv_usec;
         }
-        total.tv_sec = total.tv_sec + end.tv_sec;
+        total.tv_sec = total.tv_sec + end_time.tv_sec;
 
         if ( d == INT_MAX ) {
             printf( "no solution found. expanded nodes: %" PRId64 ", generated nodes: %" PRId64 "\n",
@@ -194,7 +206,8 @@ int main( int argc, char **argv )
             printf( "cost: %d, expanded: %" PRId64 ", nodes: %" PRId64 "\n",
 		      d, nodes_expanded_for_startstate, nodes_generated_for_startstate );
         }
-        total_d += d;
+        if(d != INT_MAX)
+        	total_d += d;
         total_expanded  += nodes_expanded_for_startstate;
         total_generated += nodes_generated_for_startstate;
 
