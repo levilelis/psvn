@@ -193,7 +193,7 @@ int main( int argc, char **argv )
             return EXIT_FAILURE;
         }
 
-        max_time_seconds = stoi(argv[2]);
+        max_time_seconds = atoi(argv[2]);
     }
 
     total_d = 0;
