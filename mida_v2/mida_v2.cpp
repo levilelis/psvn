@@ -123,12 +123,12 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     nodes_generated_for_startstate += nodes_generated_for_bound;
 
     long N0 = nodes_expanded_for_bound;
-    int kmin = 0;
+    long kmin = 0;
 
-    int j = 0; //index of the A6519 sequence being accessed
+    long j = 0; //index of the A6519 sequence being accessed
     while (1) {
     	j += pow(2, kmin);
-    	int k = log2(A6519(j));
+    	long k = log2(A6519(j));
 
     	if(upper[k] != -1) {
     		if(upper[k] < up_min){

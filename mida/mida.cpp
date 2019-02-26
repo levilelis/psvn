@@ -114,11 +114,11 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     bound = global_bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
     //lower[0] = bound;
 
-    int j = 0; //index of the A6519 sequence being accessed
+    long j = 0; //index of the A6519 sequence being accessed
     while (1) {
     	j += 1;
 
-    	int k = log2(A6519(j));
+    	long k = log2(A6519(j));
 
     	//if(upper[k] != -1 && lower[k] != -1 && upper[k] < lower[k+1])
     	if(upper[k] != -1 && upper[k] < global_bound)
