@@ -145,6 +145,7 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         int index = -1;
         int last_incremented_index = -1;
         for(int i = 0; i < MAX_BUCKET; i++) {
+        	printf("Bucket %d value %d \n", i, buckets[i]);
         	sum_bucket += buckets[i];
 
         	if(sum_bucket >= target) {
@@ -155,6 +156,8 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         	if(buckets[i] > 0)
         		last_incremented_index = i;
         }
+
+        printf("Last incremented %d \n", last_incremented_index);
 
         if(index >= 0) {
         	bound = bound * (1 + index/100.0);
