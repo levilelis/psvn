@@ -7,18 +7,18 @@
 # All state variables have 12 possible values.
  12 12 12 12 12 12 12 12 12 12 12 12
 
-X1 X2 X3 X4 -  -  -  -  -  -  -  -  => X4 X3 X2 X1 -  -  -  -  -  -  -  -  LABEL RevAt0 COST 1913
--  X1 X2 X3 X4 -  -  -  -  -  -  -  => -  X4 X3 X2 X1 -  -  -  -  -  -  -  LABEL RevAt1 COST 4670
--  -  X1 X2 X3 X4 -  -  -  -  -  -  => -  -  X4 X3 X2 X1 -  -  -  -  -  -  LABEL RevAt2 COST 631
--  -  -  X1 X2 X3 X4 -  -  -  -  -  => -  -  -  X4 X3 X2 X1 -  -  -  -  -  LABEL RevAt3 COST 2660
--  -  -  -  X1 X2 X3 X4 -  -  -  -  => -  -  -  -  X4 X3 X2 X1 -  -  -  -  LABEL RevAt4 COST 6917
--  -  -  -  -  X1 X2 X3 X4 -  -  -  => -  -  -  -  -  X4 X3 X2 X1 -  -  -  LABEL RevAt5 COST 6975
--  -  -  -  -  -  X1 X2 X3 X4 -  -  => -  -  -  -  -  -  X4 X3 X2 X1 -  -  LABEL RevAt6 COST 9165
--  -  -  -  -  -  -  X1 X2 X3 X4 -  => -  -  -  -  -  -  -  X4 X3 X2 X1 -  LABEL RevAt7 COST 5346
--  -  -  -  -  -  -  -  X1 X2 X3 X4 => -  -  -  -  -  -  -  -  X4 X3 X2 X1 LABEL RevAt8 COST 4868
-X4 -  -  -  -  -  -  -  -  X1 X2 X3 => X1 -  -  -  -  -  -  -  -  X4 X3 X2 LABEL RevAt9 COST 6193
-X3 X4 -  -  -  -  -  -  -  -  X1 X2 => X2 X1 -  -  -  -  -  -  -  -  X4 X3 LABEL RevAt10 COST 5810
-X2 X3 X4 -  -  -  -  -  -  -  -  X1 => X3 X2 X1 -  -  -  -  -  -  -  -  X4 LABEL RevAt11 COST 7667
+X1 X2 X3 X4 -  -  -  -  -  -  -  -  => X4 X3 X2 X1 -  -  -  -  -  -  -  -  LABEL RevAt0 
+-  X1 X2 X3 X4 -  -  -  -  -  -  -  => -  X4 X3 X2 X1 -  -  -  -  -  -  -  LABEL RevAt1 
+-  -  X1 X2 X3 X4 -  -  -  -  -  -  => -  -  X4 X3 X2 X1 -  -  -  -  -  -  LABEL RevAt2 
+-  -  -  X1 X2 X3 X4 -  -  -  -  -  => -  -  -  X4 X3 X2 X1 -  -  -  -  -  LABEL RevAt3 
+-  -  -  -  X1 X2 X3 X4 -  -  -  -  => -  -  -  -  X4 X3 X2 X1 -  -  -  -  LABEL RevAt4 
+-  -  -  -  -  X1 X2 X3 X4 -  -  -  => -  -  -  -  -  X4 X3 X2 X1 -  -  -  LABEL RevAt5 
+-  -  -  -  -  -  X1 X2 X3 X4 -  -  => -  -  -  -  -  -  X4 X3 X2 X1 -  -  LABEL RevAt6 
+-  -  -  -  -  -  -  X1 X2 X3 X4 -  => -  -  -  -  -  -  -  X4 X3 X2 X1 -  LABEL RevAt7 
+-  -  -  -  -  -  -  -  X1 X2 X3 X4 => -  -  -  -  -  -  -  -  X4 X3 X2 X1 LABEL RevAt8 
+X4 -  -  -  -  -  -  -  -  X1 X2 X3 => X1 -  -  -  -  -  -  -  -  X4 X3 X2 LABEL RevAt9 
+X3 X4 -  -  -  -  -  -  -  -  X1 X2 => X2 X1 -  -  -  -  -  -  -  -  X4 X3 LABEL RevAt10 
+X2 X3 X4 -  -  -  -  -  -  -  -  X1 => X3 X2 X1 -  -  -  -  -  -  -  -  X4 LABEL RevAt11 
 
 GOAL 0 1 2 3 4 5 6 7 8 9 10 11 
 GOAL 1 2 3 4 5 6 7 8 9 10 11 0 
