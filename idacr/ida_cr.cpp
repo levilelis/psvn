@@ -46,7 +46,7 @@ int get_bucket_index(int child_f, int bound) {
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const int bound, int current_g, int optimal )
+              const double bound, int current_g, int optimal )
 {
     int rule_used;
     func_ptr iter;
@@ -100,7 +100,8 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
 int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
 {
-    int next_bound, bound, done;
+    int done;
+    double bound;
 
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
@@ -145,7 +146,6 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         int index = -1;
         int last_incremented_index = -1;
         for(int i = 0; i < MAX_BUCKET; i++) {
-        	printf("Bucket %d value %d \n", i, buckets[i]);
         	sum_bucket += buckets[i];
 
         	if(sum_bucket >= target) {
@@ -157,17 +157,12 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         		last_incremented_index = i;
         }
 
-        printf("Last incremented %d \n", last_incremented_index);
-
         if(index >= 0) {
         	bound = bound * (1 + index/100.0);
         }
         else {
         	bound = bound * (1 + last_incremented_index/100.0);
         }
-
-        printf("next bound: %d \n", bound);
-
     }
 
     return best_soln_sofar;
