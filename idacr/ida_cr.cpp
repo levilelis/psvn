@@ -80,7 +80,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             if (child_f > bound || child_f >= best_soln_sofar) {
                //increment bucket
             	int index = get_bucket_index(child_f, bound);
-            	if(index >= 0)
+            	if(index >= 0 && index < MAX_BUCKET)
             		buckets[index]++;
             } else {
                if( dfs_heur( heuristic, &child,
@@ -136,7 +136,7 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
             break;
         }
 
-        if ( best_soln_sofar <= bound ) { // will always be true if bound == INT_MAX
+        if ( best_soln_sofar <= bound ) {
             break;
         }
 
@@ -162,6 +162,9 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         else {
         	bound = bound * (1 + last_incremented_index/100.0);
         }
+
+        printf("next bound: %d \n", bound);
+
     }
 
     return best_soln_sofar;
