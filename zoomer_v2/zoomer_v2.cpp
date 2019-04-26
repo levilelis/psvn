@@ -33,7 +33,7 @@ struct timeval start, end_time, total;
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const long bound, long *next_bound, long current_g, int optimal )
+              const double bound, double *theta_minus, double *theta_plus, long current_g, int optimal )
 {
     int rule_used;
     func_ptr iter;
@@ -64,8 +64,9 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             int child_f = current_g + move_cost + child_h;
 
             if (current_g + move_cost + child_h > bound) {
-               *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
+               *theta_plus = myMIN( *theta_plus, current_g + move_cost + child_h );
             } else if(child_f < best_soln_sofar) {
+            	*theta_minus = myMAX( *theta_minus, current_g + move_cost + child_h );
             	budget -= 1;
                 if (budget == 0) {
                 	return -1; //out of search budget
@@ -73,7 +74,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                 int res = dfs_heur( heuristic, &child,
                         state,      // parent pruning
-                        bound, next_bound, current_g + move_cost, optimal );
+                        bound, theta_minus, theta_plus, current_g + move_cost, optimal );
                 if (res == -1)
                 	return -1; //out of search budget
                 if (res == 1)
@@ -89,7 +90,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
 {
 	if (is_goal(state)) { return 0; }
 
-	long bound;
+	double bound;
 	int done;
 
     best_soln_sofar = INT_MAX;
@@ -98,12 +99,13 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     nodes_expanded_for_bound  = 0;
     nodes_generated_for_bound = 0;
 
-    long upper;
-    long up_min = INT_MAX;
-    long lower = heuristic->abstraction_data_lookup( state );
+    double upper;
+    double up_min = INT_MAX;
+    double dummy = -INT_MAX;
+    double lower = heuristic->abstraction_data_lookup( state );
 
     budget = INT_MAX; //infinity search budget
-    if(dfs_heur(heuristic, state, state, lower, &up_min, 0, 0)) { //regular IDA* search, no budget
+    if(dfs_heur(heuristic, state, state, lower, &dummy, &up_min, 0, 0)) { //regular IDA* search, no budget
     	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
     	nodes_generated_for_startstate += nodes_generated_for_bound;
     	return best_soln_sofar;
@@ -118,7 +120,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     while (1) {
     	k += 1;
     	upper = INT_MAX;
-    	long bound = -1;
+    	double bound = -1;
 
     	while(upper > up_min) {
     		if (upper == INT_MAX)
@@ -129,10 +131,12 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
 
             nodes_expanded_for_bound  = 0;
             nodes_generated_for_bound = 0;
-            long t = INT_MAX;
+            double theta_plus = INT_MAX;
+            double theta_minus = -INT_MAX;
 
             budget = N0 * pow(2, k);
-            done = dfs_heur( heuristic, state, state, bound, &t, 0, 1 );
+            //printf("Budget %d and bound %f \n", budget, bound);
+            done = dfs_heur( heuristic, state, state, bound, &theta_minus, &theta_plus, 0, 1 );
 
             nodes_expanded_for_startstate  += nodes_expanded_for_bound;
             nodes_generated_for_startstate += nodes_generated_for_bound;
@@ -141,10 +145,10 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
             if ( best_soln_sofar <= bound && done != -1)
             	return best_soln_sofar;
             if( done == -1) { //We have exhausted the search budget
-            	upper = bound;
+            	upper = theta_minus;
             } else {
             	lower = bound;
-            	up_min = t;
+            	up_min = theta_plus;
             }
 
             gettimeofday( &end_time, NULL );
