@@ -141,8 +141,9 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
             nodes_expanded_for_startstate  += nodes_expanded_for_bound;
             nodes_generated_for_startstate += nodes_generated_for_bound;
 
-            //A solution was found within the bound and it was proven to be optimal
-            if ( best_soln_sofar <= bound && done != -1)
+            if ( done == INT_MAX ) //Timeout
+            	return INT_MAX;
+            if ( best_soln_sofar <= bound && done != -1) //A solution was found within the bound and it was proven to be optimal
             	return best_soln_sofar;
             if( done == -1) { //We have exhausted the search budget
             	upper = theta_minus;
