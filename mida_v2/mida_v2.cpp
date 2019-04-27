@@ -28,13 +28,12 @@ int64_t nodes_generated_for_startstate ;  // number of nodes generated until sol
 int64_t max_time_seconds; //maximum running time in seconds
 int best_soln_sofar = INT_MAX;
 long budget = 0;
-long global_bound;
 struct timeval start, end_time, total;
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const long bound, long *next_bound, long current_g, int optimal )
+              const double bound, double *theta_minus, double *theta_plus, long current_g, int optimal )
 {
     int rule_used;
     func_ptr iter;
@@ -65,8 +64,9 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             int child_f = current_g + move_cost + child_h;
 
             if (current_g + move_cost + child_h > bound) {
-               *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
+               *theta_plus = myMIN( *theta_plus, current_g + move_cost + child_h );
             } else if(child_f < best_soln_sofar) {
+            	*theta_minus = myMAX( *theta_minus, current_g + move_cost + child_h );
             	budget -= 1;
                 if (budget == 0) {
                 	return -1; //out of search budget
@@ -74,7 +74,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                 int res = dfs_heur( heuristic, &child,
                         state,      // parent pruning
-                        bound, next_bound, current_g + move_cost, optimal );
+                        bound, theta_minus, theta_plus, current_g + move_cost, optimal );
                 if (res == -1)
                 	return -1; //out of search budget
                 if (res == 1)
@@ -94,26 +94,26 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 {
 	if (is_goal(state)) { return 0; }
 
-	long bound;
+	double bound;
 	int done;
 
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
 
-    long upper[51];
+    double upper[51];
 
     for(int i = 0; i < 51; i++) {
     	upper[i] = -1;
     }
 
     best_soln_sofar = INT_MAX;
-    //bound = global_bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
 
-    long up_min = INT_MAX;
-    long lower = heuristic->abstraction_data_lookup( state );
+    double up_min = INT_MAX;
+    double dummy = -INT_MAX;
+    double lower = heuristic->abstraction_data_lookup( state );
 
     budget = INT_MAX; //infinity search budget
-    if(dfs_heur(heuristic, state, state, lower, &up_min, 0, 0)) { //regular IDA* search, no budget
+    if(dfs_heur(heuristic, state, state, lower, &dummy, &up_min, 0, 0)) { //regular IDA* search, no budget
     	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
     	nodes_generated_for_startstate += nodes_generated_for_bound;
     	return best_soln_sofar;
@@ -131,7 +131,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     	long k = log2(A6519(j));
 
     	if(upper[k] != -1) {
-    		if(upper[k] < up_min){
+    		if(upper[k] <= up_min){
     			kmin = k + 1;
     			j -= pow(2, k);
     			continue;
@@ -149,23 +149,25 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
         budget = N0 * pow(2, k);
 
-        long next_bound = INT_MAX;
+        double theta_plus = INT_MAX;
+        double theta_minus = -INT_MAX;
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
-                             bound, &next_bound, 0,
+                             bound, &theta_minus, &theta_plus, 0,
 							 1 ); // optimal search
 
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
 
-        //A solution was found within the bound and it proven to be optimal
-        if ( best_soln_sofar <= bound && done != -1)
+        if ( done == INT_MAX ) //Timeout
+        	return INT_MAX;
+        if ( best_soln_sofar <= bound && done != -1) //A solution was found within the bound and it proven to be optimal
             break;
         if( done == -1) { //We have exhausted the search budget
-        	upper[k] = bound;
+        	upper[k] = theta_minus;
         } else {
         	lower = bound;
-        	up_min = next_bound;
+        	up_min = theta_plus;
         }
 
         gettimeofday( &end_time, NULL );
