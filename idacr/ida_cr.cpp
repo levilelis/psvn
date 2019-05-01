@@ -83,12 +83,13 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             	if(index >= 0 && index < MAX_BUCKET)
             		buckets[index]++;
             } else {
-               if( dfs_heur( heuristic, &child,
-                             state,      // parent pruning
-                             bound, current_g + move_cost, optimal ) )
-               {
+            	int res = dfs_heur( heuristic, &child,
+                        state,      // parent pruning
+                        bound, current_g + move_cost, optimal );
+               if( res == INT_MAX ) //timeout
+            	   return INT_MAX;
+               if( res ) //finding sub-optimal solutions
                    return 1;
-               }
             }
         }
     }
@@ -133,7 +134,7 @@ int idastar_cr( const AbstractionHeuristic * heuristic, const state_t *state )
         if(end_time.tv_sec - start.tv_sec > max_time_seconds)
         	return INT_MAX;
 
-        if( done ) {
+        if( done == 1 ) {
             break;
         }
 

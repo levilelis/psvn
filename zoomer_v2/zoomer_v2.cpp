@@ -55,9 +55,9 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
         const int move_cost = fwd_rule_costs[ rule_used ];
 
-        if (is_goal(&child) && current_g + move_cost <= bound) {
+        if ( is_goal(&child) && current_g + move_cost <= bound ) {
             best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
-            if(!optimal)
+            if( !optimal )
             	return 1;
         } else {
             int child_h = heuristic->abstraction_data_lookup( &child );
@@ -75,9 +75,11 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
                 int res = dfs_heur( heuristic, &child,
                         state,      // parent pruning
                         bound, theta_minus, theta_plus, current_g + move_cost, optimal );
-                if (res == -1)
+                if ( res == INT_MAX ) //out of time
+                	return INT_MAX;
+                if ( res == -1 )
                 	return -1; //out of search budget
-                if (res == 1)
+                if ( res == 1 )
                 	return 1; //finding suboptimal solutions
             }
         }
@@ -105,7 +107,10 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
     double lower = heuristic->abstraction_data_lookup( state );
 
     budget = INT_MAX; //infinity search budget
-    if(dfs_heur(heuristic, state, state, lower, &dummy, &up_min, 0, 0)) { //regular IDA* search, no budget
+    done = dfs_heur(heuristic, state, state, lower, &dummy, &up_min, 0, 0);
+    if ( done == INT_MAX ) //Timeout
+    	return INT_MAX;
+    if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
     	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
     	nodes_generated_for_startstate += nodes_generated_for_bound;
     	return best_soln_sofar;
