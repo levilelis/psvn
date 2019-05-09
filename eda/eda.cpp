@@ -75,12 +75,13 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
             if(child_f <= bound && child_f < best_soln_sofar) {
 
-               if( dfs_heur( heuristic, &child,
-                             state,      // parent pruning
-                             bound, current_g + move_cost, optimal ) )
-               {
+            	int res = dfs_heur( heuristic, &child,
+                        state,      // parent pruning
+                        bound, current_g + move_cost, optimal );
+               if( res == INT_MAX ) //timeout
+            	   return INT_MAX;
+               if( res ) //finding sub-optimal solutions
                    return 1;
-               }
             }
         }
     }
