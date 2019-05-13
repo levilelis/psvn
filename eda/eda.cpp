@@ -118,17 +118,16 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
-        if( done ) {
-            break;
-        }
 
         gettimeofday( &end_time, NULL );
         if(end_time.tv_sec - start.tv_sec > max_time_seconds)
         	return INT_MAX;
 
-        if ( best_soln_sofar <= pow(2, k) ) { // will always be true if bound == INT_MAX
+        if( done == 1 )
             break;
-        }
+
+        if ( best_soln_sofar <= pow(2, k) )
+            break;
 
         k++;
     }
