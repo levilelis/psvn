@@ -26,6 +26,7 @@ int64_t nodes_generated_for_bound ;   // number of nodes generated for a given c
 int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solution found for a given start state
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
 int64_t max_time_seconds; //maximum running time in seconds
+float m_factor; //multiplicative factor for Zoomer
 int best_soln_sofar = INT_MAX;
 long budget = 0;
 struct timeval start, end_time, total;
@@ -88,7 +89,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     return 0;
 }
 
-int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
+int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const float m_factor)
 {
 	if (is_goal(state)) { return 0; }
 
@@ -139,7 +140,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state )
             double theta_plus = INT_MAX;
             double theta_minus = -INT_MAX;
 
-            budget = N0 * pow(2, k);
+            budget = N0 * pow(m_factor, k);
             //printf("Budget %d and bound %f \n", budget, bound);
             done = dfs_heur( heuristic, state, state, bound, &theta_minus, &theta_plus, 0, 1 );
 
@@ -181,7 +182,7 @@ int main( int argc, char **argv )
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 3 ) {
+    if( argc != 4 ) {
         printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
         return EXIT_FAILURE;
     } else {
@@ -193,6 +194,7 @@ int main( int argc, char **argv )
         }
 
         max_time_seconds = atoi(argv[2]);
+        m_factor = atof(argv[3]);
     }
 
     total_d = 0;
@@ -209,7 +211,7 @@ int main( int argc, char **argv )
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
-        d = zoomer( heuristic, &state );
+        d = zoomer( heuristic, &state, m_factor );
 
         gettimeofday( &end_time, NULL );
         end_time.tv_sec -= start.tv_sec;

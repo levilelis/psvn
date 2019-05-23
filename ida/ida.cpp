@@ -82,16 +82,17 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             if (current_g + move_cost + child_h > bound) {
                *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
             } else {
-               if( dfs_heur( heuristic, &child,
-        #ifdef MOVE_PRUNING
-                             c_history,  // move pruning
-        #else
-                             state,      // parent pruning
-        #endif
-                             bound, next_bound, current_g + move_cost ) )
-               {
-                   return 1;
-                }
+            	int res = dfs_heur( heuristic, &child,
+            	        #ifdef MOVE_PRUNING
+            	                             c_history,  // move pruning
+            	        #else
+            	                             state,      // parent pruning
+            	        #endif
+            	                             bound, next_bound, current_g + move_cost );
+                if( res == INT_MAX ) //timeout
+             	   return INT_MAX;
+                if( res ) //finding sub-optimal solutions
+                    return 1;
             }
         }
     }
@@ -126,7 +127,7 @@ int idastar( const AbstractionHeuristic * heuristic, const state_t *state )
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
-        if( done ) {
+        if( done == 1 ) {
             break;
         }
 
