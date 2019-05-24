@@ -26,7 +26,9 @@ int64_t nodes_generated_for_bound ;   // number of nodes generated for a given c
 int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solution found for a given start state
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
 int64_t max_time_seconds; //maximum running time in seconds
-float m_factor; //multiplicative factor for Zoomer
+float bound_factor; //multiplicative factor for Zoomer's exponential bound growth
+float c1;
+float c2;
 int best_soln_sofar = INT_MAX;
 long budget = 0;
 struct timeval start, end_time, total;
@@ -89,7 +91,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
     return 0;
 }
 
-int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const float m_factor)
+int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const float bound_factor, const float c1, const float c2)
 {
 	if (is_goal(state)) { return 0; }
 
@@ -130,7 +132,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     	while(upper > up_min) {
     		if (upper == INT_MAX)
-    			bound = lower * 2;
+    			bound = lower * bound_factor;
     		else
     			bound = (upper + lower)/2;
     		bound = myMAX(bound, up_min);
@@ -140,8 +142,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
             double theta_plus = INT_MAX;
             double theta_minus = -INT_MAX;
 
-            budget = N0 * pow(m_factor, k);
-            //printf("Budget %d and bound %f \n", budget, bound);
+            budget = N0 * pow(c2, k);
             done = dfs_heur( heuristic, state, state, bound, &theta_minus, &theta_plus, 0, 1 );
 
             nodes_expanded_for_startstate  += nodes_expanded_for_bound;
@@ -151,6 +152,12 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
             	return INT_MAX;
             if ( best_soln_sofar <= bound && done != -1) //A solution was found within the bound and it was proven to be optimal
             	return best_soln_sofar;
+            //If the DFS expands a number of nodes that is within c1^k and c2^k, then stop the iteration
+            //and make N0 equals the number of nodes expanded in the previous iteration
+            if (N0 * pow(c1, k) <= nodes_expanded_for_bound) {
+            	N0 = nodes_expanded_for_bound;
+            	break;
+            }
             if( done == -1) { //We have exhausted the search budget
             	upper = theta_minus;
             } else {
@@ -182,8 +189,9 @@ int main( int argc, char **argv )
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 4 ) {
-        printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
+    if( argc != 6 ) {
+        printf("There must 5 command line arguments, the prefix of the pattern database, "
+        		"the time limit in seconds, theta growth factor, constants c1 and c2.\n");
         return EXIT_FAILURE;
     } else {
  /* read the abstraction and pattern database (state_map) */
@@ -194,7 +202,9 @@ int main( int argc, char **argv )
         }
 
         max_time_seconds = atoi(argv[2]);
-        m_factor = atof(argv[3]);
+        bound_factor = atof(argv[3]);
+        c1 = atof(argv[4]);
+        c2 = atof(argv[5]);
     }
 
     total_d = 0;
@@ -211,7 +221,7 @@ int main( int argc, char **argv )
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
-        d = zoomer( heuristic, &state, m_factor );
+        d = zoomer( heuristic, &state, bound_factor, c1, c2);
 
         gettimeofday( &end_time, NULL );
         end_time.tv_sec -= start.tv_sec;
