@@ -41,7 +41,7 @@ void find_minimum_operator_cost()
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const int bound, int *next_bound, int current_g, int optimal )
+              const int bound, int *next_bound, int current_g, int optimal, int oracle_search )
 {
     int rule_used;
     func_ptr iter;
@@ -70,7 +70,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
             int child_h = heuristic->abstraction_data_lookup( &child );
             int child_f = current_g + move_cost + child_h;
 
-            if (child_f > bound || child_f >= best_soln_sofar) {
+            if (child_f > bound || child_f >= best_soln_sofar || (child_f >= bound && oracle_search)) {
                *next_bound = myMIN( *next_bound, current_g + move_cost + child_h );
             } else {
                is_leaf = false;
@@ -79,7 +79,7 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
                if( dfs_heur( heuristic, &child,
                              state,      // parent pruning
-                             bound, next_bound, current_g + move_cost, optimal ) )
+                             bound, next_bound, current_g + move_cost, optimal, oracle_search ) )
                {
                    return 1;
                }
@@ -120,7 +120,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
                              bound, &next_bound, 0,
-							 1 ); // optimal search
+							 1, 0 ); // optimal search
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
         nodes_generated_for_startstate += nodes_generated_for_bound;
@@ -194,7 +194,8 @@ int main( int argc, char **argv )
         dfs_heur( heuristic, &state,
                              &state,         // parent pruning
                              d, &next_bound, 0,
-							 1 ); // optimal search
+							 1, // optimal search
+							 1 ); // oracle search
 
         d = best_soln_sofar;
 
