@@ -124,11 +124,35 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     long N0 = nodes_expanded_for_bound;
 
+	long nodes_expanded_previous_iteration;
     int k = 0;
     while (1) {
     	k += 1;
     	upper = INT_MAX;
-    	double bound = -1;
+
+    	do {
+    		nodes_expanded_previous_iteration = nodes_expanded_for_bound;
+
+            nodes_expanded_for_bound  = 0;
+            nodes_generated_for_bound = 0;
+
+    	    budget = INT_MAX; //infinity search budget
+    	    double theta_plus = INT_MAX;
+    	    done = dfs_heur(heuristic, state, state, up_min, &dummy, &theta_plus, 0, 0);
+    	    up_min = theta_plus;
+
+    	    if ( done == INT_MAX ) //Timeout
+    	    	return INT_MAX;
+    	    if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
+    	    	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
+    	    	nodes_generated_for_startstate += nodes_generated_for_bound;
+    	    	return best_soln_sofar;
+    	    }
+        	//cout << "Bound: " << up_min << "\t expanded: " << nodes_expanded_for_bound << "\t previous: " << nodes_expanded_previous_iteration << endl;
+    	} while(nodes_expanded_for_bound >= nodes_expanded_previous_iteration * 2);
+
+        double theta_plus = INT_MAX;
+        double theta_minus = -INT_MAX;
 
     	while(upper > up_min) {
     		if (upper == INT_MAX)
@@ -139,8 +163,9 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
             nodes_expanded_for_bound  = 0;
             nodes_generated_for_bound = 0;
-            double theta_plus = INT_MAX;
-            double theta_minus = -INT_MAX;
+
+            theta_plus = INT_MAX;
+            theta_minus = -INT_MAX;
 
             budget = N0 * pow(c2, k);
             done = dfs_heur( heuristic, state, state, bound, &theta_minus, &theta_plus, 0, 1 );
@@ -153,9 +178,10 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
             if ( best_soln_sofar <= bound && done != -1) //A solution was found within the bound and it was proven to be optimal
             	return best_soln_sofar;
             //If the DFS expands a number of nodes that is within c1^k and c2^k, then stop the iteration
-            //and make N0 equals the number of nodes expanded in the previous iteration
+            //and assign the number of nodes expanded in the previous iteration to N0
             if (N0 * pow(c1, k) <= nodes_expanded_for_bound) {
             	N0 = nodes_expanded_for_bound;
+            	up_min = theta_plus;
             	break;
             }
             if( done == -1) { //We have exhausted the search budget
@@ -169,6 +195,10 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
             if(end_time.tv_sec - start.tv_sec > max_time_seconds)
             	return INT_MAX;
     	}
+
+    //	cout << "Finished binary search and nodes_expanded_for_bound: " << nodes_expanded_for_bound << " up_min: "
+    //			<< up_min << " theta_plus: "<< theta_plus
+    //			<< endl;
     }
 
     return best_soln_sofar;
