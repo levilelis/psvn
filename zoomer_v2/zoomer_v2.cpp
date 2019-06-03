@@ -138,6 +138,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     	    budget = INT_MAX; //infinity search budget
     	    double theta_plus = INT_MAX;
+    	    best_soln_sofar = INT_MAX;
     	    done = dfs_heur(heuristic, state, state, up_min, &dummy, &theta_plus, 0, 0);
     	    up_min = theta_plus;
 
