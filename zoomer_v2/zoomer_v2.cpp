@@ -179,7 +179,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
             	return best_soln_sofar;
             //If the DFS expands a number of nodes that is within c1^k and c2^k, then stop the iteration
             //and assign the number of nodes expanded in the previous iteration to N0
-            if (N0 * pow(c1, k) <= nodes_expanded_for_bound) {
+            if (nodes_expanded_for_bound >= N0 * pow(c1, k) && nodes_expanded_for_bound <= budget) {
             	N0 = nodes_expanded_for_bound;
             	up_min = theta_plus;
             	break;
