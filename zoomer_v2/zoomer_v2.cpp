@@ -111,16 +111,15 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     budget = INT_MAX; //infinity search budget
     done = dfs_heur(heuristic, state, state, lower, &dummy, &up_min, 0, 0);
+
+	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
+	nodes_generated_for_startstate += nodes_generated_for_bound;
+
     if ( done == INT_MAX ) //Timeout
     	return INT_MAX;
     if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
-    	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
-    	nodes_generated_for_startstate += nodes_generated_for_bound;
     	return best_soln_sofar;
     }
-
-    nodes_expanded_for_startstate  += nodes_expanded_for_bound;
-    nodes_generated_for_startstate += nodes_generated_for_bound;
 
     long N0 = nodes_expanded_for_bound;
 
@@ -140,13 +139,15 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
     	    double theta_plus = INT_MAX;
     	    best_soln_sofar = INT_MAX;
     	    done = dfs_heur(heuristic, state, state, up_min, &dummy, &theta_plus, 0, 0);
+
+    	    nodes_expanded_for_startstate  += nodes_expanded_for_bound;
+    	    nodes_generated_for_startstate += nodes_generated_for_bound;
+
     	    up_min = theta_plus;
 
     	    if ( done == INT_MAX ) //Timeout
     	    	return INT_MAX;
     	    if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
-    	    	nodes_expanded_for_startstate  += nodes_expanded_for_bound;
-    	    	nodes_generated_for_startstate += nodes_generated_for_bound;
     	    	return best_soln_sofar;
     	    }
         	//cout << "Bound: " << up_min << "\t expanded: " << nodes_expanded_for_bound << "\t previous: " << nodes_expanded_previous_iteration << endl;
