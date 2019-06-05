@@ -58,9 +58,9 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
         const int move_cost = fwd_rule_costs[ rule_used ];
 
-        if ( is_goal(&child) && current_g + move_cost <= bound ) {
+        if ( is_goal(&child)) {
             best_soln_sofar = myMIN(best_soln_sofar, current_g + move_cost);
-            if( !optimal )
+            if( current_g + move_cost <= bound && !optimal )
             	return 1;
         } else {
             int child_h = heuristic->abstraction_data_lookup( &child );
@@ -117,7 +117,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     if ( done == INT_MAX ) //Timeout
     	return INT_MAX;
-    if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
+    if( best_soln_sofar <= up_min ) { //found a solution with regular IDA*, no budget
     	return best_soln_sofar;
     }
 
@@ -147,7 +147,7 @@ int zoomer( const AbstractionHeuristic * heuristic, const state_t *state, const 
 
     	    if ( done == INT_MAX ) //Timeout
     	    	return INT_MAX;
-    	    if( best_soln_sofar < INT_MAX ) { //found a solution with regular IDA*, no budget
+    	    if( best_soln_sofar <= theta_plus ) { //found a solution with regular IDA*, no budget
     	    	return best_soln_sofar;
     	    }
         	//cout << "Bound: " << up_min << "\t expanded: " << nodes_expanded_for_bound << "\t previous: " << nodes_expanded_previous_iteration << endl;
