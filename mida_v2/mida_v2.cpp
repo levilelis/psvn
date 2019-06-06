@@ -29,6 +29,9 @@ int64_t max_time_seconds; //maximum running time in seconds
 int best_soln_sofar = INT_MAX;
 long budget = 0;
 struct timeval start, end_time, total;
+float bound_factor; //multiplicative factor for Z3's exponential bound growth
+float c1;
+float c2;
 
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
@@ -92,7 +95,7 @@ long A6519(long j) {
     return ((j ^ j-1) + 1) / 2;
 }
 
-int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *state )
+int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *state, const float bound_factor, const float c1, const float c2 )
 {
 	if (is_goal(state)) { return 0; }
 
@@ -144,7 +147,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
 
     		bound = (upper[k] + lower) / 2;
     	} else {
-    		bound = 2 * lower;
+    		bound = bound_factor * lower;
     	}
 
     	bound = myMAX(bound, up_min);
@@ -152,7 +155,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         nodes_expanded_for_bound  = 0;
         nodes_generated_for_bound = 0;
 
-        budget = N0 * pow(2, k);
+        budget = N0 * pow(c2, k);
 
         double theta_plus = INT_MAX;
         double theta_minus = -INT_MAX;
@@ -198,7 +201,7 @@ int main( int argc, char **argv )
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 3 ) {
+    if( argc != 6 ) {
         printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
         return EXIT_FAILURE;
     } else {
@@ -210,6 +213,9 @@ int main( int argc, char **argv )
         }
 
         max_time_seconds = atoi(argv[2]);
+        bound_factor = atof(argv[3]);
+        c1 = atof(argv[4]);
+        c2 = atof(argv[5]);
     }
 
     total_d = 0;
@@ -226,7 +232,7 @@ int main( int argc, char **argv )
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
-        d = optimisticidastar( heuristic, &state );
+        d = optimisticidastar( heuristic, &state, bound_factor, c1, c2 );
 
         gettimeofday( &end_time, NULL );
         end_time.tv_sec -= start.tv_sec;
