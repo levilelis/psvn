@@ -27,6 +27,7 @@ int64_t nodes_expanded_for_startstate ;   // number of nodes expanded until solu
 int64_t nodes_generated_for_startstate ;  // number of nodes generated until solution found for a given start state
 int64_t max_time_seconds; //maximum running time in seconds
 int best_soln_sofar = INT_MAX;
+float bound_factor;
 int min_cost = INT_MAX;
 int max_branching_fator_for_bound; //largest branching factor for a given cost bound
 struct timeval start, end_time, total;
@@ -43,7 +44,7 @@ void find_minimum_operator_cost()
 int dfs_heur( const AbstractionHeuristic * heuristic,
               const state_t *state,
               const state_t *parent_state, // for parent pruning
-              const long bound, int current_g, int optimal )
+              const float bound, int current_g, int optimal )
 {
     int rule_used;
     func_ptr iter;
@@ -91,10 +92,10 @@ int dfs_heur( const AbstractionHeuristic * heuristic,
 
 
 
-int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *state )
+int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *state, const float bound_factor )
 {
     int done;
-    long bound;
+    float bound;
 
     nodes_expanded_for_startstate  = 0;
     nodes_generated_for_startstate = 0;
@@ -104,16 +105,17 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
     find_minimum_operator_cost();
 
     best_soln_sofar = INT_MAX;
-    bound = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
+    float N0 = heuristic->abstraction_data_lookup( state ); // initial bound = h(start)
     int k = 0;
     while (1) {
         nodes_expanded_for_bound  = 0;
         nodes_generated_for_bound = 0;
         leaf_nodes_for_bound = 0;
         max_branching_fator_for_bound = 0;
+        bound = N0 * pow(bound_factor, k);
         done = dfs_heur( heuristic, state,
                              state,         // parent pruning
-                             pow(2, k), 0,
+                             bound, 0,
 							 1 ); // optimal search
         //printf( "bound: %d, expanded: %" PRId64 ", generated: %" PRId64 "\n", bound, nodes_expanded_for_bound, nodes_generated_for_bound );
         nodes_expanded_for_startstate  += nodes_expanded_for_bound;
@@ -126,7 +128,7 @@ int optimisticidastar( const AbstractionHeuristic * heuristic, const state_t *st
         if( done == 1 )
             break;
 
-        if ( best_soln_sofar <= pow(2, k) )
+        if ( best_soln_sofar <= bound )
             break;
 
         k++;
@@ -150,18 +152,20 @@ int main( int argc, char **argv )
 
     AbstractionHeuristic * heuristic;
 
-    if( argc != 3 ) {
+    if( argc != 4 ) {
         printf("There must 2 command line arguments, the prefix of the pattern database to use and the time limit in seconds.\n");
         return EXIT_FAILURE;
     } else {
  /* read the abstraction and pattern database (state_map) */
     	heuristic = new AbstractionHeuristic();
         heuristic->read_abstraction_data( argv[1] );
+
         if (heuristic == NULL) {
             return EXIT_FAILURE;
         }
 
         max_time_seconds = atoi(argv[2]);
+        bound_factor = atof(argv[3]);
     }
 
     total_d = 0;
@@ -178,7 +182,7 @@ int main( int argc, char **argv )
   //      printf( "\n" );
         gettimeofday( &start, NULL );
 
-        d = optimisticidastar( heuristic, &state );
+        d = optimisticidastar( heuristic, &state, bound_factor );
 
         gettimeofday( &end_time, NULL );
         end_time.tv_sec -= start.tv_sec;
