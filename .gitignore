@@ -1,3 +1,21 @@
+#Project-dependent folders
+dataprocessing/
+results/
+
+#Eclipse files
+Debug/
+.settings/
+.pydevproject
+.project
+
+#compressed files
+*.zip
+*.rar
+
+OSX files
+.DS_Store
+*/.DS_Store
+
 # Prerequisites
 *.d
 
@@ -30,3 +48,25 @@
 *.exe
 *.out
 *.app
+
+# PSVN-dependent executables
+*.ida
+*.astar
+*.mida
+*.ida_cr
+*.eda
+*.cycle
+*.chen
+*.idlts
+*.oida
+*.oracle
+*.zoomer
+*.gen
+
+# PSVN PDBs
+*.state_map
+*.distSummary
+
+# SVN files
+*/.svn/*
+.svn/*
